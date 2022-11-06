@@ -22,21 +22,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         System.out.println("configure!!!");
         http
                 .authorizeRequests()
-                    .antMatchers( "/study-service/login", "/resources/**").permitAll() // 로그인 권한은 누구나, resources파일도 모든권한
+                    .antMatchers( "http://52.78.161.54:8000/study-service/login", "/resources/**").permitAll() // 로그인 권한은 누구나, resources파일도 모든권한
                     // USER, ADMIN 접근 허용
                     .antMatchers("/userAccess").hasRole("USER")
                     .antMatchers("/userAccess").hasRole("ADMIN")
                     .and()
                 .formLogin()
                     .loginPage("/login")
-                    .loginProcessingUrl("/study-service/login")
-                    .defaultSuccessUrl("/study-service/dashboard")
+                    .loginProcessingUrl("http://52.78.161.54:8000/study-service/login")
+                    .defaultSuccessUrl("http://52.78.161.54:8000/study-service/dashboard")
 //                    .defaultSuccessUrl("http://127.0.0.1:8000/study-service/dashboard")
-                    .failureUrl("/study-service/access_denied") // 인증에 실패했을 때 보여주는 화면 url, 로그인 form으로 파라미터값 error=true로 보낸다.
+                    .failureUrl("http://52.78.161.54:8000/study-service/access_denied") // 인증에 실패했을 때 보여주는 화면 url, 로그인 form으로 파라미터값 error=true로 보낸다.
                     .and()
                 .logout()
-                    .logoutUrl("/study-service/logout")
-                    .logoutSuccessUrl("/study-service/login")
+                    .logoutUrl("http://52.78.161.54:8000/study-service/logout")
+                    .logoutSuccessUrl("http://52.78.161.54:8000/study-service/login")
                     .and()
                 .csrf().disable();		//로그인 창
     }
