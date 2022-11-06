@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>직무학습</title>
+
+    <section class="link" th:replace="common/link::common-link"></section>
+
+    <!-- eun costum-->
+    <style>
+        .boardheader{
+            padding:.75rem 1.25rem;
+            margin-bottom:0;
+            background-color:#f8f9fc;
+            border-bottom:1px solid #e3e6f0;
+            display:flex;
+        }
+    </style>
+    <script>
+        function init(){
+            $('#staymd').val(new Date('2022-01-01').toISOString().substring(0,10));
+            $('#endymd').val(new Date().toISOString().substring(0, 10));
+        }
+
+        function boardDetail(id){
+            alert("/study-service/board/boardDetail/"+id);
+            var url = "/study-service/board/boardDetail/"+id;
+            var form = document.createElement("form");
+            form.setAttribute("charset", "UTF-8");
+            form.setAttribute("method", "GET");  //Post 방식
+            form.setAttribute("action", url);
+            form.submit();
+        }
+
+        function search(){
+            if(myform.search_input.value==""){
+                alert("조회할 내용을 입력해주세요.");
+                myform.search_input.focus();
+                return;
+            }
+        }
+    </script>
+</head>
+
+<body id="page-top" onload="init()">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <section class="content-side-bar" th:replace="common/sidebar::common-side-bar"></section>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+
+            <!-- Topbar -->
+            <section class="content-top-bar" th:replace="common/topbar::common-top-bar"></section>
+            <!-- End of Topbar -->
+
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <h1 class="h3 mb-0 text-gray-800">게시판</h1>
+                </div>
+                <form name="myform">
+                    <div class="card shadow mb-4">
+                        <div class="boardheader navbar border-bottom-primary" style="padding-right: 100px; padding-left: 100px;">
+                            <div class="m-0 font-weight-bold text-primary" style="font-size: 18px;" >
+                                등록유형
+                            </div>
+                            <div class="mb-sm-0 navbar-light bg-light" >
+                                <select name="gubun"style="height: 35px; width: 150px; border: #dbdad9 1px solid;"  >
+                                    <option value="전체">전체</option>
+                                    <option value="1">구분1</option>
+                                    <option value="2">구분2</option>
+                                    <option value="3">구분3</option>
+                                    <option value="4">구분4</option>
+                                </select>
+                            </div>
+                            <div class="m-0 font-weight-bold text-primary" style="font-size: 18px; font-family: 'Courier New'" >
+                                등록일시
+                            </div>
+                            <input type="date" class="mb-sm-0" style="height: 35px; border: #dbdad9 1px solid;" name="staymd" id="staymd">
+
+                            <div class="mb-sm-0" style="font-size: 19px;" >
+                                ~
+                            </div>
+                            <input type="date" class="mb-sm-0" style="height: 35px; border: #dbdad9 1px solid;" name="endymd" id="endymd">
+                            <div class="mb-sm-0" >
+                                <select name="select_condition" style="height: 35px; width: 100px; border: #dbdad9 1px solid;"  >
+                                    <option value="제목">제목</option>
+                                    <option value="작성자">작성자</option>
+                                    <option value="구분">구분</option>
+                                    <option value="문제번호">문제번호</option>
+                                </select>
+                            </div>
+                            <input name="search_input" class="mb-sm-0" style="height: 35px; width: 300px; border: #dbdad9 1px solid;" >
+                            <input type="button" value="조회" class="btn-primary btn d-sm-inline-block" style="width: 100px; height: 35px;" onclick="search();"/>
+                        </div>
+                    </div>
+                </form>
+                <!-- DataTales Example -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-1">
+                        <div class="navbar">
+                            <h6 class="m-0 font-weight-bold text-primary">전체 목록</h6>
+
+                            <a href="/study-service/board/boardWrite" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                                <i class="fas fa-pencil-alt fa-sm text-white-50"></i>
+                                작성하기
+                            </a>
+
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr class="bg-primary" style="color: white">
+                                        <th style="width: 40px;text-align: center; font-size: 17px;">번호</th>
+                                        <th style="width: 140px;text-align: center; font-size: 17px;">구&nbsp;&nbsp;분</th>
+                                        <th style="text-align: center; font-size: 17px;">제&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;목</th>
+                                        <th style="width: 60px;text-align: center; font-size: 17px;">댓글수</th>
+                                        <th style="width: 90px;text-align: center; font-size: 17px;">작성자</th>
+                                        <th style="width: 120px;text-align: center; font-size: 17px;">등록일시</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="data: ${boardList}"
+                                        th:idx="${data.idx}"
+                                        th:onclick="|location.href='@{/study-service/board/boardDetail/}'+ ${data.idx}|";
+                                        class="btn-light" style="height: 30px;">
+                                        <td style="text-align: center; padding: 8.5px;" name="idx" th:text="${data.idx}"></td>
+                                        <td style="text-align: center; padding: 8.5px;" name="gubun" th:text="${data.gubun}"></td>
+                                        <td style="text-align: center; padding: 8.5px;" name="title" th:text="${data.title}"></td>
+                                        <td style="text-align: center; padding: 8.5px;" name="replynum" th:text="${data.replynum}"></td>
+                                        <td style="text-align: center; padding: 8.5px;" name="writeuser" th:text="${data.writeuser}"></td>
+                                        <td style="text-align: center; padding: 8.5px;" name="writedt" th:text="${data.writedt}"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.container-fluid -->
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <section class="content-footer-bar" th:replace="common/footer::common-footer-bar"></section>
+        <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Logout Modal-->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-primary" href="login.html">Logout</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+
+</html>

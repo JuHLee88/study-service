@@ -1,0 +1,62 @@
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<div class="modal-header bg-gradient-primary">
+    <h5 class="modal-title h5" id="historyModalLabel" style="color: white">문제분류별 문제보기</h5>
+    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">×</span>
+    </button>
+</div>
+<div>
+    <h4>직무학습 문제</h4>
+</div>
+<div th:each="data1: ${queListPrint}">
+    <table class="table table-bordered dataTable">
+        <colgroup>
+            <col style="width: 12%;"/>
+            <col style="width: 15%;"/>
+            <col style="width: 12%;"/>
+            <col style="width: 22%;"/>
+            <col style="width: 12%;"/>
+            <col style="width: *;"/>
+        </colgroup>
+        <tr>
+            <td>인증분야</td>
+            <td><div th:text="${data1.authnm}"/></td>
+            <td>문제ID</td>
+            <td><div th:text="${data1.qtypenm}"/></td>
+            <td>등록일</td>
+            <td><div th:text="${data1.createdt}"/></td>
+        </tr>
+        <tr>
+            <td>문제ID</td>
+            <td colspan="5"><div th:text="${data1.qid}"/></td>
+        </tr>
+        <tr>
+            <td>문제</td>
+            <td colspan="5"><span style="border" th:text="${data1.question}"/></br>
+                <span th:text="${data1.itemid1}+'. '"/><span  th:text="${data1.item1}"/></br>
+                <span th:text="${data1.itemid2}+'. '"/><span  th:text="${data1.item2}"/></br>
+                <span th:text="${data1.itemid3}+'. '"/><span  th:text="${data1.item3}"/></br>
+                <span th:text="${data1.itemid4}+'. '"/><span  th:text="${data1.item4}"/>
+            </td>
+        </tr>
+        <tr>
+            <td>정답</td>
+            <td colspan="5">
+                <span th:text="${data1.answer}"/>
+            </td>
+        </tr>
+        <tr>
+            <td>해설</td>
+            <td colspan="5">
+                <span th:text="${data1.explanation}"/>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="modal-body">
+    <div style="height:900px;">
+        <div class="modal-footer">
+        </div>
+    </div>
+</div>
+

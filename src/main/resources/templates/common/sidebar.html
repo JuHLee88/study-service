@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+
+<section class="content-side-bar" th:fragment="common-side-bar">
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+        <!-- Sidebar - Brand -->
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="http://52.78.161.54:8000/study-service/dashboard">
+            <div class="sidebar-brand-icon rotate-n-15">
+                <i class="fas fa-laugh-squint"></i>
+            </div>
+            <div class="sidebar-brand-text mx-3">welcome<br><sup>직무학습시스템</sup></div>
+        </a>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider my-0">
+
+        <!-- Nav Item - Dashboard -->
+        <li class="nav-item active">
+            <a class="nav-link" href="http://52.78.161.54:8000/study-service/dashboard">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+
+        <!-- Heading -->
+        <div class="sidebar-heading">
+            user-interface
+        </div>
+
+        <!-- Nav Item - Pages Collapse Menu -->
+        <li class="nav-item">
+            <a class="nav-link" href="http://52.78.161.54:8000/study-service/queTypeList" aria-expanded="true" aria-controls="collapseTwo">
+                <i class="fas fa-fw fa-cog"></i>
+                <span>문제분류별 문제보기</span>
+            </a>
+        </li>
+
+        <!-- Nav Item - Utilities Collapse Menu -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+               aria-expanded="true" aria-controls="collapseUtilities">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>시험응시</span>
+            </a>
+            <div th:switch="${menu_nm}">
+                <div th:case="dailyExam">
+                    <div id="collapseUtilities" class="collapse show" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <h6 class="collapse-header">exam type:</h6>
+                            <a class="collapse-item show" style="color: #dda20a; font-weight: bold; font-size: 13px;" href="http://52.78.161.54:8000/study-service/dailyExam">일일학습</a>
+                            <a class="collapse-item" style="color: #2e59d9; font-weight: bold; font-size: 13px;" href="http://52.78.161.54:8000/study-service/realExam">평가학습</a>
+                            <a class="collapse-item" style="color: #2e59d9; font-weight: bold; font-size: 13px;" href="http://52.78.161.54:8000/study-service/evalExam">시험응시</a>
+                        </div>
+                    </div>
+                </div>
+                <div th:case="realExam">
+                    <div id="collapseUtilities" class="collapse show" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <h6 class="collapse-header">exam type:</h6>
+                            <a class="collapse-item" style="color: #2e59d9; font-weight: bold; font-size: 13px;" href="http://52.78.161.54:8000/study-service/dailyExam">일일학습</a>
+                            <a class="collapse-item show" style="color: #dda20a; font-weight: bold; font-size: 13px;" href="http://52.78.161.54:8000/study-service/realExam">평가학습</a>
+                            <a class="collapse-item" style="color: #2e59d9; font-weight: bold; font-size: 13px;" href="http://52.78.161.54:8000/study-service/evalExam">시험응시</a>
+                        </div>
+                    </div>
+                </div>
+                <div th:case="evalExam">
+                    <div id="collapseUtilities" class="collapse show" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <h6 class="collapse-header">exam type:</h6>
+                            <a class="collapse-item" style="color: #2e59d9; font-weight: bold; font-size: 13px;" href="http://52.78.161.54:8000/study-service/dailyExam">일일학습</a>
+                            <a class="collapse-item" style="color: #2e59d9; font-weight: bold; font-size: 13px;" href="http://52.78.161.54:8000/study-service/realExam">평가학습</a>
+                            <a class="collapse-item show" style="color: #dda20a; font-weight: bold; font-size: 13px;" href="http://52.78.161.54:8000/study-service/evalExam">시험응시</a>
+                        </div>
+                    </div>
+                </div>
+                <div th:case="*">
+                    <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <h6 class="collapse-header">exam type:</h6>
+                            <a class="collapse-item" style="color: #2e59d9; font-weight: bold; font-size: 13px;" href="http://52.78.161.54:8000/study-service/dailyExam">일일학습</a>
+                            <a class="collapse-item" style="color: #2e59d9; font-weight: bold; font-size: 13px;" href="http://52.78.161.54:8000/study-service/realExam">평가학습</a>
+                            <a class="collapse-item" style="color: #2e59d9; font-weight: bold; font-size: 13px;" href="http://52.78.161.54:8000/study-service/evalExam">시험응시</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+
+        <!-- Nav Item - Charts -->
+        <li class="nav-item">
+            <a class="nav-link" href="http://52.78.161.54:8000/study-service/board">
+                <i class="fas fa-fw fa-chart-area"></i>
+                <span>게시판</span></a>
+        </li>
+
+        <!-- Nav Item - Tables -->
+        <li class="nav-item">
+            <a class="nav-link" href="http://52.78.161.54:8000/study-service/mypage">
+                <i class="fas fa-fw fa-table"></i>
+                <span>마이페이지</span></a>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+
+        <!-- Heading -->
+        <div class="sidebar-heading">
+            admin-interface
+        </div>
+
+        <!-- Nav Item - Pages Collapse Menu -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
+               aria-expanded="true" aria-controls="collapsePages">
+                <i class="fas fa-fw fa-folder"></i>
+                <span>시스템관리</span>
+            </a>
+
+            <div th:switch="${menu_nm}">
+                <div th:case="queGen">
+                    <div id="collapsePages" class="collapse show" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <h6 class="collapse-header">For maintanance:</h6>
+                            <a class="collapse-item" style="color: #2e59d9; font-weight: bold; font-size: 13px;" href="http://52.78.161.54:8000/admin-service/queTypeRatio">인증분야 및 가중치관리</a>
+                            <a class="collapse-item show" style="color: #dda20a; font-weight: bold; font-size: 13px;" href="http://52.78.161.54:8000/admin-service/queGen">문제관리</a>
+                            <a class="collapse-item show" style="color: #2e59d9; font-weight: bold; font-size: 13px;" href="http://52.78.161.54:8000/admin-service/totResult">결과관리</a>
+                            <div class="collapse-divider"></div>
+                            <h6 class="collapse-header">For System:</h6>
+                            <a class="collapse-item" style="color: #2e59d9; font-weight: bold; font-size: 13px;" href="#">권한관리</a>
+                        </div>
+                    </div>
+                </div>
+                <div th:case="totResult">
+                    <div id="collapsePages" class="collapse show" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <h6 class="collapse-header">For maintanance:</h6>
+                            <a class="collapse-item" style="color: #2e59d9; font-weight: bold; font-size: 13px;" href="http://52.78.161.54:8000/admin-service/queTypeRatio">인증분야 및 가중치관리</a>
+                            <a class="collapse-item" style="color: #2e59d9; font-weight: bold; font-size: 13px;" href="http://52.78.161.54:8000/admin-service/queGen">문제관리</a>
+                            <a class="collapse-item show" style="color: #dda20a; font-weight: bold; font-size: 13px;" href="http://52.78.161.54:8000/admin-service/totResult">결과관리</a>
+                            <div class="collapse-divider"></div>
+                            <h6 class="collapse-header">For System:</h6>
+                            <a class="collapse-item" style="color: #2e59d9; font-weight: bold; font-size: 13px;" href="#">권한관리</a>
+                        </div>
+                    </div>
+                </div>
+                <div th:case="queTypeRatio">
+                    <div id="collapsePages" class="collapse show" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <h6 class="collapse-header">For maintanance:</h6>
+                            <a class="collapse-item show" style="color: #dda20a; font-weight: bold; font-size: 13px;" href="http://52.78.161.54:8000/admin-service/queTypeRatio">인증분야 및 가중치관리</a>
+                            <a class="collapse-item" style="color: #2e59d9; font-weight: bold; font-size: 13px;" href="http://52.78.161.54:8000/admin-service/queGen">문제관리</a>
+                            <a class="collapse-item show" style="color: #2e59d9; font-weight: bold; font-size: 13px;" href="http://52.78.161.54:8000/admin-service/totResult">결과관리</a>
+                            <div class="collapse-divider"></div>
+                            <h6 class="collapse-header">For System:</h6>
+                            <a class="collapse-item" style="color: #2e59d9; font-weight: bold; font-size: 13px;" href="#">권한관리</a>
+                        </div>
+                    </div>
+                </div>
+                <div th:case="Authority">
+                    <div id="collapsePages" class="collapse show" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <h6 class="collapse-header">For maintanance:</h6>
+                            <a class="collapse-item" style="color: #2e59d9; font-weight: bold; font-size: 13px;" href="http://52.78.161.54:8000/admin-service/queTypeRatio">인증분야 및 가중치관리</a>
+                            <a class="collapse-item" style="color: #2e59d9; font-weight: bold; font-size: 13px;" href="http://52.78.161.54:8000/admin-service/queGen">문제관리</a>
+                            <a class="collapse-item show" style="color: #2e59d9; font-weight: bold; font-size: 13px;" href="http://52.78.161.54:8000/admin-service/totResult">결과관리</a>
+                            <div class="collapse-divider"></div>
+                            <h6 class="collapse-header">For System:</h6>
+                            <a class="collapse-item show" style="color: #dda20a; font-weight: bold; font-size: 13px;" href="#">권한관리</a>
+                        </div>
+                    </div>
+                </div>
+                <div th:case="*">
+                    <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <h6 class="collapse-header">For maintanance:</h6>
+                            <a class="collapse-item" style="color: #2e59d9; font-weight: bold; font-size: 13px;" href="http://52.78.161.54:8000/admin-service/queTypeRatio">인증분야 및 가중치관리</a>
+                            <a class="collapse-item" style="color: #2e59d9; font-weight: bold; font-size: 13px;" href="http://52.78.161.54:8000/admin-service/queGen">문제관리</a>
+                            <a class="collapse-item show" style="color: #2e59d9; font-weight: bold; font-size: 13px;" href="http://52.78.161.54:8000/admin-service/totResult">결과관리</a>
+                            <div class="collapse-divider"></div>
+                            <h6 class="collapse-header">For System:</h6>
+                            <a class="collapse-item" style="color: #2e59d9; font-weight: bold; font-size: 13px;" href="#">권한관리</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </li>
+
+
+
+        <!-- Divider -->
+        <hr class="sidebar-divider d-none d-md-block">
+
+        <!-- Sidebar Toggler (Sidebar) -->
+        <div class="text-center d-none d-md-inline">
+            <button class="rounded-circle border-0" id="sidebarToggle"></button>
+        </div>
+
+        <!-- Sidebar Message -->
+        <div class="sidebar-card d-none d-lg-flex">
+            <img class="sidebar-card-illustration mb-2" src="http://13.124.0.31:9001/bootstrap/img/undraw_rocket.svg" alt="...">
+            <p class="text-center mb-2"><strong>This Version</strong> is proto-type!</p>
+            <a class="btn btn-success btn-sm">nothing action!</a>
+        </div>
+
+    </ul>
+    <!-- End of Sidebar -->
+
+</section>
+</body>

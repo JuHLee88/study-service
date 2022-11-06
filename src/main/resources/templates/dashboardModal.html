@@ -1,0 +1,57 @@
+<script>
+    $(document).ready(function (){
+
+    });
+
+</script>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<div class="modal-header bg-gradient-warning">
+    <h5 class="modal-title h5" id="historyModalLabel" style="color: white">공지사항 </h5>
+    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">×</span>
+    </button>
+</div>
+<div class="modal-body">
+    <div  style="height:450px;" class="bg-light">
+        <div class="card-body">
+            <div>
+                <div class="line" style="width: 100%;"> <!--구분, 작성자 -->
+                    <div class="row" style="width: 30%;">
+                        <input type="hidden" th:value="${boardDetail.idx}" id="idx" name="idx">
+                        <div class="detailSide mb-0 font-weight-bold text-gray-800">
+                            구분
+                        </div>
+                        <div th:text="${boardDetail.gubun}"></div>
+                    </div>
+                    <div class="row" style="width: 70%; ">
+                        <div class="detailSide mb-0 font-weight-bold text-gray-800" style="position: absolute; right: 300px;">
+                            작성자
+                        </div>
+                        <div th:text="${boardDetail.writeuser}" style="position: absolute; right: 240px;"></div>
+                        <div class="detailSide mb-0 font-weight-bold text-gray-800" style="position: absolute; right: 120px;">
+                            작성일자
+                        </div>
+                        <div th:text="${boardDetail.writedt}" style="position: absolute; right: 30px; "></div>
+                    </div>
+                </div>
+                <!-- Divider -->
+                <hr>
+                <div class="line row"><!--제목-->
+                    <div class="detailSide mb-0 font-weight-bold text-gray-800">
+                        제목
+                    </div>
+                    <div th:text="${boardDetail.title}"></div>
+                </div>
+                <!-- Divider -->
+                <hr>
+                <div class="row"><!--내용-->
+                    <div class="detailSide mb-0 font-weight-bold text-gray-800">
+                        내용
+                    </div>
+                    <div class="card-body" style="height:270px; overflow: auto; padding-top: 0px; padding-left: 0px;" th:text="${boardDetail.content}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTDMapper3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.studyservice.queType.mapper.QueTypeMapper">
+
+    <select id="queList" resultType="com.example.studyservice.queType.model.QueTypeVO">
+        SELECT A.AUTHCD
+             , SUBSTR(A.AUTHCD, 0, 1) AS A_CD
+             , A.NM                   AS AUTHCDNM
+        FROM studydb.auth A
+           , studydb.ratio B
+           , studydb.quetype C
+        WHERE B.AUTHCD = A.AUTHCD
+          AND B.QTYPECD = C.QTYPECD
+        GROUP BY AUTHCD
+        ORDER BY A.AUTHCD
+    </select>
+
+    <select id="queListDetail" resultType="com.example.studyservice.queType.model.QueTypeVO">
+        select a.nm      as authcdnm
+             , a.authcd
+             , c.qtypecd as cd
+             , c.nm      as nm
+             , (SELECT COUNT(1) CNT
+                FROM studydb.question Q
+                WHERE Q.QTYPECD = c.QTYPECD
+        )                             AS QUECNT
+        from studydb.auth a
+           , studydb.ratio b
+           , studydb.quetype c
+        where b.authcd = a.authcd
+          and b.QTYPECD = c.QTYPECD
+          and a.authcd = #{authcd}
+        order by c.QTYPECD
+    </select>
+
+    <select id="queListPrint" resultType="com.example.studyservice.queType.model.QueListVO">
+        select t1.qtypecd
+             , t2.nm qtypenm
+             , t1.qid
+             , t1.lvl
+             , t1.anstype
+             , t4.nm authnm
+             , t4.AUTHCD
+             , substr(t1.createdt,1,8) createdt
+             , replace(replace(t1.source, chr(13), ''), chr(10),'') source
+             , replace(replace(t1.question, chr(13),''),chr(10),'') question
+             , (select itemid from studydb.queitem where qid = t1.qid and itemid = 1) itemid1
+             , (select item from studydb.queitem where qid = t1.qid and itemid = 1 ) item1
+             , (select itemid from studydb.queitem where qid = t1.qid and itemid = 2) itemid2
+             , (select item from studydb.queitem where qid = t1.qid and itemid = 2 ) item2
+             , (select itemid from studydb.queitem where qid = t1.qid and itemid = 3) itemid3
+             , (select item from studydb.queitem where qid = t1.qid and itemid = 3 ) item3
+             , (select itemid from studydb.queitem where qid = t1.qid and itemid = 4) itemid4
+             , (select item from studydb.queitem where qid = t1.qid and itemid = 4 ) item4
+             , (select item from studydb.queitem where qid = t1.qid and anscd ='0') answer
+             , substr(t1.explanation, 50000, 1) explanation
+        from studydb.question t1, studydb.quetype t2, studydb.ratio t3, studydb.auth t4
+        where t1.QTYPECD  = #{qtypecd}
+          and t1.qtypecd = t2.QTYPECD
+          and t1.useyn = 'Y'
+          and t4.AUTHCD = #{authcd}
+          and t2.QTYPECD  = t3.QTYPECD
+          and t3.AUTHCD  = t4.AUTHCD
+    </select>
+</mapper>

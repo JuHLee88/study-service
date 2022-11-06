@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTDMapper3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.studyservice.exam.mapper.ExamMapper">
+
+    <select id="evalExamSelectBox" parameterType="String" resultType="HashMap">
+        SELECT AUTHCD, NM
+        FROM auth
+        WHERE USE_YN LIKE '%${gubun}%'
+        ORDER BY ORD ASC
+    </select>
+
+    <select id="dailyAuthList" resultType="HashMap">
+        SELECT AUTHCD, NM
+        FROM auth
+        WHERE USE_YN LIKE '%Y%'
+        ORDER BY ORD ASC
+    </select>
+
+    <select id="totRandomDailyQue" parameterType="String" resultType="HashMap">
+        SELECT qid
+        FROM question
+        WHERE QTYPECD IN (select qtypecd from ratio
+                          where AUTHCD= #{auth})
+        ORDER BY RAND() LIMIT 20
+    </select>
+
+    <select id="totRandomEvalQue" parameterType="String" resultType="HashMap">
+        SELECT qid
+        FROM question
+        WHERE QTYPECD IN (select qtypecd from ratio
+                          where AUTHCD= #{auth})
+        ORDER BY RAND() LIMIT 40
+    </select>
+
+    <select id="studyQue" parameterType="com.example.studyservice.exam.model.StudyQueVO" resultType="com.example.studyservice.exam.model.QuestionVO">
+        SELECT QID, QTYPECD, QUESTION, ANSTYPE, SOURCE, URL, WRITER, MODIFYUSER, CREATEDT, MODIFYDT, REQUSER, LVL, USEYN, ADMNUM, EXPLANATION
+        FROM question
+        WHERE QID = (SELECT QID
+                     FROM studyque
+                     WHERE seq = #{seq}
+                       AND sabun = #{sabun}
+                       AND startdt = #{startdt})
+    </select>
+
+    <select id="studyAns" parameterType="com.example.studyservice.exam.model.StudyQueVO" resultType="String">
+        SELECT ansyn
+        FROM studyque
+        WHERE sabun = ${sabun}
+          AND startdt = ${startdt}
+          AND seq = ${seq}
+    </select>
+
+    <select id="studyQueItem" parameterType="com.example.studyservice.exam.model.StudyQueVO" resultType="HashMap">
+        SELECT QID, ITEMID, ITEM, ANSCD
+        FROM queitem
+        WHERE QID = (SELECT QID
+                     FROM studyque
+                     WHERE seq = #{seq}
+                       AND sabun = #{sabun}
+                       AND startdt = #{startdt})
+    </select>
+
+    <select id="studyQueList" parameterType="com.example.studyservice.exam.model.StudyQueVO" resultType="HashMap">
+        SELECT seq, IFNULL(ansyn,0) ansyn
+        FROM studyque
+        WHERE sabun = ${sabun}
+          AND startdt = ${startdt}
+    </select>
+
+    <select id="getScore" parameterType="com.example.studyservice.exam.model.StudyQueVO" resultType="String">
+        SELECT CAST(ROUND(100/count(*)*count(case when YN = 'Y' THEN 1 END)) as char) score
+        FROM (
+                 select t1.sabun
+                      , t1.startdt
+                      , t1.qid
+                      , t1.ansyn
+                      , t2.ITEMID
+                      , t2.ANSCD
+                      , case when length(t2.anscd) > 0 then 'Y' ELSE 'N' END YN
+                 from studyque t1
+                          LEFT JOIN queitem t2
+                                    ON t1.qid = t2.QID
+                                        and t1.ansyn = t2.ITEMID
+                 where sabun = #{sabun}
+                   and startdt = #{startdt}
+             ) T1;
+    </select>
+
+    <insert id="insertStudy" parameterType="com.example.studyservice.exam.model.StudyVO" >
+        INSERT INTO study(sabun, startdt, studytype, authcd, enddt, score, middt)
+            VALUE(#{sabun},#{startdt},#{studytype},#{authcd},#{enddt},#{score},#{middt})
+    </insert>
+
+    <insert id="insertStudyQue" parameterType="com.example.studyservice.exam.model.StudyQueVO" >
+        INSERT INTO studyque(sabun, startdt, qid, seq, ansyn)
+            VALUE(#{sabun}, #{startdt}, #{qid}, #{seq}, #{ansyn})
+    </insert>
+
+    <update id="updateStudyQue" parameterType="com.example.studyservice.exam.model.StudyQueVO">
+        UPDATE studyque
+        SET ansyn = #{ansyn}
+        WHERE sabun = #{sabun}
+          AND startdt = #{startdt}
+          AND seq = #{seq}
+    </update>
+
+    <update id="updateStudy" parameterType="com.example.studyservice.exam.model.StudyVO">
+        UPDATE study
+        SET enddt = #{enddt}
+          , score = #{score}
+        WHERE sabun = #{sabun}
+          AND startdt = #{startdt}
+    </update>
+
+</mapper>

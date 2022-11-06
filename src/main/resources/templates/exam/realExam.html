@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title></title>
+
+    <!-- Custom fonts for this template-->
+    <link href="http://13.124.0.31:9001/bootstrap/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="http://13.124.0.31:9001/bootstrap/css/sb-admin-2.min.css" rel="stylesheet">
+
+</head>
+<script>
+
+    function fnModuleInfo(){
+        var auth = $('#select-auth option:selected').val();
+        var authNm = $('#select-auth option:selected').text();
+        console.log("1. "+$('#select-auth option:selected').text());
+        console.log("2. "+$('#select-auth option:selected').val());
+        if (auth == "선택"){
+            alert("시험항목을 선택하세요.");
+            return;
+        }
+        $('#realModal .modal-content').load("http://52.78.161.54:8000/study-service/realExam/realExamModal?auth="+auth+"&authNm="+authNm);
+        $('#realModal').modal({
+            backdrop: 'static',
+            keyboard: false
+        });
+    }
+</script>
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+        <!-- side bar-->
+        <section class="content-side-bar" th:replace="common/sidebar::common-side-bar"></section>
+        <!-- side bar end-->
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <section class="content-top-bar" th:replace="common/topbar::common-top-bar"></section>
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <h1 class="h3 mb-1 text-gray-800">Practice Test</h1>
+                    <p class="mb-3">
+                        Practice Study는 각 분야의 시험을 사전에 체험할 수 있는 <span style="color: #2e59d9">평가</span> 시스템 입니다. <br>
+                    </p>
+
+                    <!-- Content Row -->
+                    <div class="">
+                        <div class="">
+                            <div class="card position-relative">
+                                <div class="card-header py-3" style="display: flex; flex-wrap: nowrap;">
+                                    <h6 class="m-0 font-weight-bold text-primary">Practice Test</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="small mb-1">● 항목을 선택한 후 학습을 시작하세요</div>
+                                    <nav class="navbar navbar-expand navbar-light bg-light mb-4 border-bottom-primary">
+                                        <a class="navbar-brand" style="font-size: 16px; width: 20%; padding-left: 15px">학습항목</a>
+                                        <div class="navbar-nav ml-auto" style="width: 80%">
+                                            <select class="nav-link ml-auto " style="border: 0px solid; width: 100%;" id="select-auth">
+                                                <option value="선택">선택</option>
+                                                <option th:each="item, i : ${realAuthList}" th:value="${item.AUTHCD}" th:utext="${item.NM}"></option>
+                                            </select>
+                                        </div>
+                                    </nav>
+                                    <a href="#" class="btn btn-primary btn-icon-split" style="float: right" onclick="fnModuleInfo()">
+                                        <span class="icon text-white-50">
+                                            <i class="fas fa-flag"></i>
+                                        </span>
+                                        <span class="text">평가시작</span>
+                                    </a>
+                                    <br>
+                                    <br>
+                                    <p class="mb-0 small">
+                                        ● 본인이 응시한 평가항목을 선택 후 평가하시기 바랍니다. <br>
+                                        ● 평가시작과 동시에 제한시간이 시작되며 <span style="color:#dc3545;">시간은 120분</span>입니다. <br>
+                                        ● 평가 중 <span style="color:#dc3545;">예기치 못한 종료가 발생할 경우 자동저장</span> 되오니 이어서 평가를 진행하시기 바랍니다. <br>
+                                        <span style="color:#dc3545;">● 최종제출을 하지 않을 경우의 불이익은 책임지지 않습니다.</span> <br>
+
+                                        <!-- Moa Modal-->
+                                    <div class="modal fade" id="realModal" tabindex="-1" role="dialog" aria-labelledby="historyModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-xl" role="document">
+                                            <div class="modal-content">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.container-fluid -->
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <section class="content-footer-bar" th:replace="common/footer::common-footer-bar"></section>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="http://13.124.0.31:9001/bootstrap/vendor/jquery/jquery.min.js"></script>
+    <script src="http://13.124.0.31:9001/bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="http://13.124.0.31:9001/bootstrap/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="http://13.124.0.31:9001/bootstrap/js/sb-admin-2.min.js"></script>
+
+</body>
+
+</html>

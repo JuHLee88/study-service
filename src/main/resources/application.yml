@@ -1,0 +1,71 @@
+server:
+  port: 9001
+
+spring:
+  application:
+    name: study-service
+  rabbitmq:
+    host: 52.78.161.54
+    port: 5672
+    username: admin
+    password: StrongPassword
+  datasource:
+#    url: jdbc:mariadb://database-1.c4pp2lrqcj6b.ap-northeast-2.rds.amazonaws.com:3306/studydb
+#    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:log4jdbc:mariadb://database-1.c4pp2lrqcj6b.ap-northeast-2.rds.amazonaws.com:3306/studydb
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    username: admin
+    password: tkarnrwl1!
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
+  thymeleaf:
+    cache: false
+
+mybatis:
+  configuration:
+    lazy-loading-enabled: true
+    aggressive-lazy-loading: false
+    map-underscore-to-camel-case: true
+  type-aliases-package: com.example.studyservice
+  mapper-locations: mapper/**/*.xml
+
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    service-url:
+      defaultZone: http://52.78.161.54:8761/eureka
+#      defaultZone: http://127.0.0.1:8761/eureka
+    fetch-registry: true
+    register-with-eureka: true
+
+logging:
+  level:
+    com:
+      zaxxer:
+        hikari: DEBUG
+    javax:
+      sql:
+        DataSource: OFF
+    jdbc:
+      audit: OFF
+      resultset: OFF
+      resultsettable: DEBUG
+      sqlonly: DEBUG
+      sqltiming: OFF
+    org:
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, beans, busrefresh, info, metrics, prometheus

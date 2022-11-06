@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>직무학습</title>
+
+    <section class="link" th:replace="common/link::common-link"></section>
+<!--    &lt;!&ndash; Custom fonts for this template &ndash;&gt;-->
+<!--    <link href="/bootstrap/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">-->
+<!--    <link-->
+<!--            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"-->
+<!--            rel="stylesheet">-->
+
+<!--    &lt;!&ndash; Custom styles for this template &ndash;&gt;-->
+<!--    <link href="/bootstrap/css/sb-admin-2.min.css" rel="stylesheet">-->
+
+<!--    &lt;!&ndash; Custom styles for this page &ndash;&gt;-->
+<!--    <link href="/bootstrap/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">-->
+    <!-- eun costum-->
+    <style>
+        .detailSide{
+            width: 100px;
+            height: 10%;
+        }
+    </style>
+    <script>
+        //등록하기 조건
+        function boardWrite(){
+            if($("#gubun").val()=="선택"){
+                alert("구분을 선택하세요.");
+                return false;
+            }
+
+            if($("#title").val() == ""){
+                alert("제목을 입력하세요.");
+                return false;
+            }
+
+            if($("textarea[name=content]").val() == ""){
+                alert("내용을 입력하세요.");
+                return false;
+            }
+            return true;
+        }
+
+    </script>
+</head>
+
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <section class="content-side-bar" th:replace="common/sidebar::common-side-bar"></section>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- M  ain Content -->
+        <div id="content">
+
+            <!-- Topbar -->
+            <section class="content-top-bar" th:replace="common/topbar::common-top-bar"></section>
+            <!-- End of Topbar -->
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+                <h1 class="h3 mb-2 text-gray-800">게시판</h1>
+                <form name="insert_data" action="/study-service/board/boardWrite" method="post" onsubmit="return boardWrite();">
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">등록하기</h6>
+                        </div>
+                        <div class="card-body">
+                            <div>
+                                <div class="line row" style="width: 90%; text-align: center"> <!--구분, 작성자 -->
+                                    <div class="detailSide  mb-0 font-weight-bold text-gray-800">
+                                        구분
+                                    </div>
+                                    <select name="gubun" id="gubun"
+                                            style="height: 25px; width: 150px; text-align: center; border: #dbdad9 1px solid;"  >
+                                        <option value="선택">선택</option>
+                                        <option value="1">공지사항</option>
+                                        <option value="2">문의사항</option>
+                                        <option value="3">이의신청</option>
+                                    </select>
+                                    <div class="detailSide mb-0 font-weight-bold text-gray-800" style="position: absolute; right: 300px;">
+                                        작성자
+                                    </div>
+                                    <div th:text="${userInfo.userName}" style="position: absolute; right: 240px;"></div>
+                                </div>
+                                <!-- Divider -->
+                                <hr>
+                                <div class="line row" style="width: 90%; text-align: center"><!--제목-->
+                                    <div class="detailSide  mb-0 font-weight-bold text-gray-800">
+                                        제목
+                                    </div>
+                                    <input name="title" class="mb-sm-0 nav-link" style="height: 35px; width:700px; border: #dbdad9 1px solid;" >
+
+                                </div>
+                                <!-- Divider -->
+                                <hr>
+                                <div class="row" style="width: 90%; text-align: center"><!--내용-->
+                                    <div class="detailSide mb-0 font-weight-bold text-gray-800">
+                                        내용
+                                    </div>
+                                    <textarea name="content" class="mb-sm-0 nav-link" style="height: 300px; width: 700px; border: #dbdad9 1px solid;"></textarea>
+                                </div>
+                                <!-- Divider -->
+                                <hr>
+                            </div>
+                            <div>
+                                <a href="/study-service/board" class="btn-primary btn d-sm-inline-block"
+                                   style="float: right">
+                                    <i class="fa-sm text-white-50"></i>
+                                    목록
+                                </a>
+                                <input type="submit" value="등록하기" class="btn-primary btn d-sm-inline-block"
+                                       style="width: 100px; margin-right: 10px; float: right;" onclick="boardWrite();"/>
+                            </div>
+                    </div>
+                </form>
+
+            </div>
+            <!-- /.container-fluid -->
+        </div>
+        <!-- End of Main Content -->
+        <!-- Footer -->
+        <section class="content-footer-bar" th:replace="common/footer::common-footer-bar"></section>
+        <!-- End of Footer -->
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Logout Modal-->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-primary" href="login.html">Logout</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--&lt;!&ndash; Bootstrap core JavaScript&ndash;&gt;-->
+<!--<script src="/bootstrap/vendor/jquery/jquery.min.js"></script>-->
+<!--<script src="/bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>-->
+
+<!--&lt;!&ndash; Core plugin JavaScript&ndash;&gt;-->
+<!--<script src="/bootstrap/vendor/jquery-easing/jquery.easing.min.js"></script>-->
+
+<!--&lt;!&ndash; Custom scripts for all pages&ndash;&gt;-->
+<!--<script src="/bootstrap/js/sb-admin-2.min.js"></script>-->
+
+<!--&lt;!&ndash; Page level plugins &ndash;&gt;-->
+<!--<script src="/bootstrap/vendor/datatables/jquery.dataTables.min.js"></script>-->
+<!--<script src="/bootstrap/vendor/datatables/dataTables.bootstrap4.min.js"></script>-->
+
+<!--&lt;!&ndash; Page level custom scripts &ndash;&gt;-->
+<!--<script src="/bootstrap/js/demo/datatables-demo.js"></script>-->
+
+</body>
+
+</html>

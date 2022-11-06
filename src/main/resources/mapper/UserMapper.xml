@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTDMapper3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.studyservice.home.mapper.UserMapper">
+
+    <select id="getUserAccount" resultType="com.example.studyservice.home.model.UserVO">
+        SELECT USER_NO, USER_ID, USER_PW, USER_NAME, USER_AUTH, APPEND_DATE, UPDATE_DATE
+          FROM USER
+         WHERE USER_ID = #{userId}
+    </select>
+
+    <insert id="saveUser" parameterType="com.example.studyservice.home.model.UserVO">
+        INSERT INTO USER(USER_NO, USER_ID, USER_PW, USER_NAME, USER_AUTH, APPEND_DATE, UPDATE_DATE)
+            VALUE(#{userNo}, #{userId}, #{userPw}, #{userName}, #{userAuth}, #{appendDate}, #{updateDate})
+    </insert>
+</mapper>

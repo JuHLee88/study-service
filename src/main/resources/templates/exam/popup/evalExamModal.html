@@ -1,0 +1,355 @@
+<script>
+    $(document).ready(function (){
+        fnLoad();
+        function fnLoad(){
+            alert("확인을 누르시면 시험이 시작됩니다.");
+            timerStart(document.getElementById("divSetTimer"), 3600);
+        }
+
+        $("button[name='MovePre']").click(function (){
+            var startdt = $("#startdt").val();
+            var seqQue = $("#seqQue").val();
+            var ansyn = $("input[name='queItem']:checked").val();
+            var studyQueVO = {
+                startdt:startdt,seq:seqQue,ansyn:ansyn
+            }
+
+            //seqQue가 1번 이하는 안됨
+            if(seqQue < 2){
+                return alert("이전 문제가 존재하지 않습니다.");
+            }
+
+            //1. 기존 문제 및 문제아이템 삭제
+            //2. 문제 갱신
+            $("#modalContent").html('');
+            $.ajax({
+                url: "http://52.78.161.54:8000/study-service/evalExam/evalExamModal/pre",
+                data: studyQueVO,
+                type: 'POST',
+                // dataType: 'json',
+                success: function onData(data){
+                    const obj = data;
+                    const mapObj = new Map(Object.entries(obj));
+                    console.log("ansyn::: "+mapObj.get("ansyn"));
+
+                    //seqQue, startdt 갱신, 저장된 정답 체크
+                    $("#startdt").val(mapObj.get("startdt"));
+                    $("#seqQue").val(mapObj.get("seqQue"));
+                    $("#seqQue2").text(mapObj.get("seqQue"));
+                    $("#ansyn").val(mapObj.get("ansyn"));
+
+                    //question 갱신
+                    const mapQuestion = new Map(Object.entries(mapObj.get("question")));
+                    var question = mapQuestion.get("question");
+                    var queHtmlTot = makeQueHtml(question);
+
+                    //questionItem 갱신
+                    for (var i in mapObj.get("questionItem")){
+                        const mapQuestionItem = new Map(Object.entries(mapObj.get("questionItem")[i]));
+                        var itemId = mapQuestionItem.get("ITEMID");
+                        var item = mapQuestionItem.get("ITEM");
+
+                        queHtmlTot = queHtmlTot+makeQueItemHtml(itemId, item);
+                    }
+
+                    queHtmlTot = queHtmlTot+"</tbody>\n" + "</table>";
+                    $("#modalContent").html(queHtmlTot);
+                } ,
+                error:function onError(error){
+                    console.log(error);
+                }
+            });
+        });
+
+        $("button[name='MoveNext']").click(function (){
+            var startdt = $("#startdt").val();
+            var seqQue = $("#seqQue").val();
+            var totQue = $("#totQue").val();
+            var ansyn = $("input[name='queItem']:checked").val();
+
+            //seqQue가 1번 이하는 안됨
+            if(totQue == seqQue){
+                return alert("다음 문제가 존재하지 않습니다.");
+            }
+
+            var studyQueVO = {
+                startdt:startdt,seq:seqQue,ansyn:ansyn
+            }
+
+            //1. 기존 문제 및 문제아이템 삭제
+            //2. 문제 갱신
+            $("#modalContent").html('');
+            $.ajax({
+                url: "http://52.78.161.54:8000/study-service/evalExam/evalExamModal/next",
+                data: studyQueVO,
+                type: 'POST',
+                // dataType: 'json',
+                success: function onData(data){
+                    const obj = data;
+                    const mapObj = new Map(Object.entries(obj));
+                    console.log("ansyn::: "+mapObj.get("ansyn"));
+
+                    //seqQue, startdt 갱신
+                    $("#startdt").val(mapObj.get("startdt"));
+                    $("#seqQue").val(mapObj.get("seqQue"));
+                    $("#seqQue2").text(mapObj.get("seqQue"));
+                    $("#ansyn").val(mapObj.get("ansyn"));
+
+                    //question 갱신
+                    const mapQuestion = new Map(Object.entries(mapObj.get("question")));
+                    var question = mapQuestion.get("question");
+                    var queHtmlTot = makeQueHtml(question);
+
+                    //questionItem 갱신
+                    for (var i in mapObj.get("questionItem")){
+                        const mapQuestionItem = new Map(Object.entries(mapObj.get("questionItem")[i]));
+                        var itemId = mapQuestionItem.get("ITEMID");
+                        var item = mapQuestionItem.get("ITEM");
+
+                        queHtmlTot = queHtmlTot+makeQueItemHtml(itemId, item);
+                    }
+                    queHtmlTot = queHtmlTot+"</tbody>\n" + "</table>";
+                    $("#modalContent").html(queHtmlTot);
+
+                    //questionList 갱신
+                    var queListHtmlTot = "";
+                    $("#modalContentList").html('');
+                    for (var i in mapObj.get("questionList")){
+                        const mapQuestionList = new Map(Object.entries(mapObj.get("questionList")[i]));
+                        var seq = mapQuestionList.get("seq");
+                        var ansyn = mapQuestionList.get("ansyn");
+
+                        queListHtmlTot = queListHtmlTot + makeQueListHtml(seq,ansyn);
+                    }
+                    $("#modalContentList").html(queListHtmlTot);
+
+                } ,
+                error:function onError(error){
+                    console.log(error);
+                }
+            });
+
+        });
+
+        $("button[name='complete']").click(function (){
+            if(!confirm("최종제출 이후에는 수정이 불가합니다.")) return;
+
+            var startdt = $("#startdt").val();
+            var seqQue = $("#seqQue").val();
+            var ansyn = $("input[name='queItem']:checked").val();
+            var studyQueVO = {
+                startdt:startdt,seq:seqQue,ansyn:ansyn
+            }
+
+            //1. 기존 문제 및 문제아이템 삭제
+            //2. 문제 갱신
+            $("#modalContent").html('');
+            $.ajax({
+                url: "http://52.78.161.54:8000/study-service/evalExam/evalExamModal/complete",
+                data: studyQueVO,
+                type: 'POST',
+                success: function onData(data){
+                    alert("제출 되었습니다. \n결과는 마이페이지에서 확인하세요.");
+                    $("#exitBtn").click();
+                } ,
+                error:function onError(error){
+                    console.log(error);
+                }
+            });
+        });
+
+    });
+
+    function makeQueHtml(question){
+        var Html =   "<table style=\"width: 100%; border-spacing: 20px;\">\n" +
+                            "<tbody >\n" +
+                                "<tr class=\"nav-link bg-light\" style=\"border-bottom: #5a5c69 0px solid; width: 100%; height: 300px;\">\n" +
+                                    "<td>\n" +
+                                        "<div class=\"h4\">"+question+"</div>\n" +
+                                    "</td>\n" +
+                                "</tr>\n";
+        return Html;
+    }
+
+    function makeQueItemHtml(itemId, item){
+        if(itemId==$("#ansyn").val()){
+            var chk = "checked";
+        }
+        var Html =   "<tr class=\"form-check form-check-inline\" style=\"border-bottom:#6c6e7e dotted 1px;  width: 100%;\">\n" +
+                            "<td class=\"form-check-input nav-link\">\n" +
+                                "<input type=\"radio\" name=\"queItem\" value=\""+itemId+"\" "+chk+" >\n" +
+                            "</td>\n" +
+                            "<td class=\"form-check-label nav-link\">\n" +
+                                "<label>"+item+"</label>\n" +
+                            "</td>\n" +
+                        "</tr>"
+        return Html;
+    }
+
+    function makeQueListHtml(seq,ansyn){
+        var ans = "<div style='color: #dc3545'>미완료</div>";
+        if(ansyn != 0 ){
+            ans= "<div style='color: #2e59d9'>완료</div>";
+        }
+        var Html = "<table style=\"width: 100%; height: 50px; border-spacing: 20px;\">\n" +
+                        "<tr style=\"border-bottom: #5a5c69 1px dashed; width: 100%;\">\n" +
+                            "<td style=\"width: 30%; text-align: center; font-weight: bold;\">\n" +
+                                "<div>"+seq+" 번</div>\n" +
+                            "</td>\n" +
+                            "<td style=\"width: 70%; text-align: center; font-weight: bold;\">\n" + ans +
+                            "</td>\n" +
+                        "</tr>\n" +
+                    "</table>";
+        return Html;
+    }
+
+    //제한시간시작
+    function timerStart(elementId, seconds){
+        console.log(elementId + " ::: " + seconds);
+        var endTime, hours, mins, msLeft, time;
+
+        function updateTimer(){
+            msLeft = endTime - (+new Date);
+
+            if(msLeft < 0){
+                alert("제한시간이 다 되었습니다. 자동으로 시험을 종료합니다.");
+                //아래 학습종료 펑션
+                var startdt = $("#startdt").val();
+                var seqQue = $("#seqQue").val();
+                var ansyn = $("input[name='queItem']:checked").val();
+                var studyQueVO = {
+                    startdt:startdt,seq:seqQue,ansyn:ansyn
+                }
+                $.ajax({
+                    url: "http://52.78.161.54:8000/study-service/evalExam/evalExamModal/complete",
+                    data: studyQueVO,
+                    type: 'POST',
+                    success: function onData(data){
+                        alert("제출 되었습니다. \n결과는 마이페이지에서 확인하세요.");
+                        $("#exitBtn").click();
+                    } ,
+                    error:function onError(error){
+                        console.log(error);
+                    }
+                });
+            }else{
+                time = new Date(msLeft);
+                hours = time.getUTCHours();
+                mins = time.getUTCMinutes();
+                elementId.innerHTML = (hours ? hours + ':' + ('0'+mins).slice(-2) : mins) + ':' + ('0'+time.getUTCSeconds()).slice(-2);
+                setTimeout(updateTimer, time.getUTCMilliseconds()+500);
+            }
+
+            var result = (msLeft / (seconds*1000) * 100);
+            document.getElementById("progressbar").style.width = result+"%";
+        }
+
+        endTime = (+new Date)+1000*seconds;
+
+        updateTimer();
+    }
+
+</script>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<div class="modal-header bg-primary">
+    <h5 class="modal-title h5" id="historyModalLabel" style="color: white">TEST ( [[${authNm}]] )</h5>
+    <input type="hidden" id="startdt" th:value="${timeCurrent}">
+    <input type="hidden" id="seqQue" th:value="${seqQue}">
+    <input type="hidden" id="totQue" th:value="${totQue}">
+    <input type="hidden" id="ansyn" th:value="${ansyn}">
+    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">×</span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="mb-1 font-weight-bold h5">제한시간&nbsp;<span id="divSetTimer" style="color: blue"></span></div>
+
+    <div class="progress mb-4">
+        <div class="progress-bar" role="progressbar" id="progressbar" style="width: 100%"
+             aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+    <div  style="height:770px;">
+        <table style="width: 100%; border-spacing: 10px; border-collapse: separate;">
+            <thead>
+                <tr >
+                    <td class="text-secondary text-lg-center font-weight-bolder h5" style="width: 75%; text-align: center; border-bottom:#e3e6f0 solid 2px;">
+                        문제번호 <span id="seqQue2" th:text="${seqQue}"></span>
+                    </td>
+                    <td style="width: 3%;"></td>
+                    <td class="text-secondary text-lg-center font-weight-bolder h5" style="width: 25%; text-align: center; border-bottom:#e3e6f0 solid 2px;">
+                        문제목록
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="vertical-align: top;">
+                        <div id="modalContent">
+                            <table style="width: 100%; border-spacing: 20px;">
+                                <tbody >
+                                    <tr class="nav-link bg-light" style="border-bottom: #5a5c69 0px solid; width: 100%; height: 300px;">
+                                        <td>
+                                            <div class="h4" th:text="${question.question}"></div>
+                                        </td>
+                                    </tr>
+                                    <tr th:each="queItem, qi : ${questionItem}" class="form-check form-check-inline" style="border-bottom:#6c6e7e dotted 1px;  width: 100%;">
+                                        <td class="form-check-input nav-link">
+                                            <input type="radio" name="queItem" th:value="${queItem.ITEMID}" >
+                                        </td>
+                                        <td class="form-check-label nav-link">
+                                            <label th:text="${queItem.ITEM}" ></label>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </td>
+                    <td>
+                        <center>
+                            <div style="border-right: 1px solid #e3e6f0; width: 0.1px; height: 650px;"></div>
+                        </center>
+                    </td>
+                    <td style="vertical-align: top;">
+                        <div id="modalContentList" style="height: 650px; overflow: auto">
+                            <table style="width: 100%; height: 200px; ">
+                                <tr th:each="queList, ql : ${studyQueList}"
+                                    style="border-bottom: #5a5c69 1px dashed; width: 100%; height: 50px;">
+                                    <td style="width: 30%; text-align: center; font-weight: bold;">
+                                        <div th:text="${queList.seq}+' 번'" ></div>
+                                    </td>
+                                    <td style="width: 70%; text-align: center; font-weight: bold;">
+                                        <div th:text="${not #strings.isEmpty(queList.ansyn)} ? 완료 : 미완료"
+                                             style='color: #dc3545'></div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="modal-footer">
+            <button class="btn btn-warning" type="button" name="MovePre">
+                <span class="icon text-white-50">
+                    <i class="fas fa-arrow-left"></i>
+                </span>이전
+            </button>
+            <button class="btn btn-warning" type="button" name="MoveNext">
+                <span class="icon text-white-50">
+                    <i class="fas fa-arrow-right"></i>
+                </span>다음
+            </button>
+            <button class="btn btn-success" type="button" name="complete">
+                <span class="icon text-white-50">
+                    <i class="fas fa-check"></i>
+                </span>제출
+            </button>
+            <button class="btn btn-secondary" type="button" data-dismiss="modal" id="exitBtn">
+                <span class="icon text-white-50">
+                    <i class="fas fa-trash"></i>
+                </span>나가기
+            </button>
+        </div>
+    </div>
+</div>
+

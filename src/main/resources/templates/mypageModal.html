@@ -1,0 +1,62 @@
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<div class="modal-header bg-gradient-primary">
+    <h5 class="modal-title h5" id="historyModalLabel" style="color: white">문제분류별 문제보기</h5>
+    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">×</span>
+    </button>
+</div>
+<div>
+    <h4>직무학습 문제</h4>
+</div>
+<div th:each="data1: ${ansChkList}">
+    <table class="table table-bordered dataTable">
+        <colgroup>
+            <col style="width: 12%;"/>
+            <col style="width: 15%;"/>
+            <col style="width: 12%;"/>
+            <col style="width: 22%;"/>
+            <col style="width: 12%;"/>
+            <col style="width: *;"/>
+        </colgroup>
+        <tr>
+            <td>인증세부분야</td>
+            <td><div th:text="${data1.qtypenm}"/></td>
+            <td>문제ID</td>
+            <td><div th:text="${data1.qid}"/></td>
+            <td>난이도</td>
+            <td><div th:text="${data1.lvl}"/></td>
+        </tr>
+        <tr>
+            <td>문제</td>
+            <td colspan="5"><span style="color: black" th:text="${data1.question}"/></br></br>
+                <span th:if="${data1.ansyn == '1'}" style="color: red" th:text="'1. '+${data1.item1}"/>
+                <span th:unless="${data1.ansyn == '1'}" style="color: black" th:text="'1. '+${data1.item1}"/></br>
+                <span th:if="${data1.ansyn == '2'}" style="color: red" th:text="'2. '+${data1.item2}"/>
+                <span th:unless="${data1.ansyn == '2'}" style="color: black" th:text="'2. '+${data1.item2}"/></br>
+                <span th:if="${data1.ansyn == '3'}" style="color: red" th:text="'3. '+${data1.item3}"/>
+                <span th:unless="${data1.ansyn == '3'}" style="color: black" th:text="'3. '+${data1.item3}"/></br>
+                <span th:if="${data1.ansyn == '4'}" style="color: red" th:text="'4. '+${data1.item4}"/>
+                <span th:unless="${data1.ansyn == '4'}" style="color: black" th:text="'4. '+${data1.item4}"/>
+            </td>
+        </tr>
+        <tr>
+            <td>정답</td>
+            <td colspan="5">
+                <span th:text="${data1.ans}+'번'"/>
+            </td>
+        </tr>
+        <tr>
+            <td>해설</td>
+            <td colspan="5">
+                <span th:text="${data1.explanation}"/>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="modal-body">
+    <div style="height:500px;">
+        <div class="modal-footer">
+        </div>
+    </div>
+</div>
+

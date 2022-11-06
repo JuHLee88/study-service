@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTDMapper3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.studyservice.board.mapper.BoardMapper">
+
+    <select id="getboardDetailList" resultType="com.example.studyservice.board.model.BoardVO">
+        SELECT idx, gubun, title, content, writeuser, qid, writedt, modifyuser, modifydt
+        FROM board
+    </select>
+
+    <!--게시판 첫화면-->
+    <select id="getboardList" resultType="com.example.studyservice.board.model.BoardListVO">
+        select A.idx
+             , case when A.gubun ='1' then '공지사항'
+                    when GUBUN = '2' then '문의사항'
+                    when GUBUN = '3' then '이의신청'
+               ELSE A.GUBUN END gubun
+             , A.title
+             , A.content
+             , (SELECT USER_NAME from USER where USER_ID = A.writeuser) writeuser
+             , A.qid
+             , cast(date_format(A.WRITEDT,'%Y-%m-%d') as char) WRITEDT
+             , A.modifyuser
+             , A.modifydt
+             , (select count(*) from reply R where R.idx= A.idx) reply_num
+        from board A
+        ORDER BY A.idx DESC;
+    </select>
+
+    <!--디테일 화면-->
+    <select id="getboardDetail" parameterType="int" resultType="com.example.studyservice.board.model.BoardVO">
+        SELECT IDX
+             , case when gubun ='1' then '공지사항'
+                    when GUBUN = '2' then '문의사항'
+                    when GUBUN = '3' then '이의신청'
+                    ELSE GUBUN END gubun
+             , TITLE
+             , CONTENT
+             , WRITEUSER
+             , QID
+             , cast(date_format(WRITEDT,'%Y-%m-%d') as char) WRITEDT
+             , MODIFYUSER
+             , MODIFYDT
+        FROM board
+        WHERE idx = #{id}
+    </select>
+
+    <!--등록돼있는 댓글 가져오기 -->
+    <select id="getboardReply" parameterType="int" resultType="com.example.studyservice.board.model.ReplyVO">
+        <![CDATA[
+        select idx
+             , seq
+             , replace(content,'\n','<br>') content
+             , writeuser
+             , cast(date_format(WRITEDT,'%Y-%m-%d') as char) WRITEDT
+         from reply
+        where idx = #{id};
+        ]]>
+    </select>
+
+    <!--댓글쓰기 -->
+    <insert id="getboardReplyWrite" parameterType="com.example.studyservice.board.model.ReplyVO">
+        INSERT INTO reply(idx, seq, content, writeuser, writedt)
+            VALUE(#{idx}, (SELECT IFNULL(max(seq)+1,1) FROM reply R WHERE IDX=#{idx}), #{content}, #{writeuser}, #{writedt});
+    </insert>
+
+    <!--등록하기-->
+    <insert id="getboardWrite" parameterType="com.example.studyservice.board.model.BoardVO">
+        <selectKey keyProperty="idx" resultType="int" order="BEFORE">
+            select max(IDX)+1 idx FROM board
+        </selectKey>
+        INSERT INTO board(idx,gubun,title,content,writeuser,qid,writedt,modifyuser,modifydt)
+            VALUE(#{idx},#{gubun},#{title},#{content},#{writeuser},#{qid},#{writedt},#{modifyuser},#{modifydt})
+    </insert>
+
+</mapper>

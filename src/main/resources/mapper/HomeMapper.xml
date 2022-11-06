@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTDMapper3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.studyservice.home.mapper.HomeMapper">
+
+    <select id="dashTopDetail" parameterType="String" resultType="com.example.studyservice.exam.model.StudyVO">
+            with study_tmp as (
+                SELECT sabun, cast(date_format(startdt, '%Y-%m-%d %T' ) as char) as startdt, studytype, (SELECT NM FROM auth WHERE AUTHCD = t1.authcd) as authcd, enddt, score, middt
+                FROM study t1
+                WHERE studytype = 'D'
+                  AND score is not null
+                  AND enddt = (select max(enddt) from study where sabun = #{userId} and studytype = 'D')
+                UNION ALL
+                SELECT sabun, cast(date_format(startdt, '%Y-%m-%d %T' ) as char) as startdt, studytype, (SELECT NM FROM auth WHERE AUTHCD = t1.authcd) as authcd, enddt, score, middt
+                FROM study t1
+                WHERE studytype = 'G'
+                  AND score is not null
+                  AND enddt = (select max(enddt) from study where sabun = #{userId} and studytype = 'G')
+                UNION ALL
+                SELECT sabun, cast(date_format(startdt, '%Y-%m-%d %T' ) as char) as startdt, studytype, (SELECT NM FROM auth WHERE AUTHCD = t1.authcd) as authcd, enddt, score, middt
+                FROM study t1
+                WHERE studytype = 'T'
+                  AND score is not null
+                  AND enddt = (select max(enddt) from study where sabun = #{userId} and studytype = 'T')
+            )
+            select t1.sabun, t1.startdt, t1.studytype, t1.authcd, t1.enddt, t1.score
+            from study_tmp t1
+            where 1=1
+              and t1.studytype IN ('D','G','T')
+            union
+            select ifnull(t1.sabun, '-'), ifnull(t1.startdt, '-'), ifnull(t1.studytype, 'D'), ifnull(t1.authcd, '-'), ifnull(t1.enddt, '-'), ifnull(t1.score, '-')
+            from (select null) t2 left outer join study_tmp t1 on t1.studytype IN ('D') and t1.score is not null
+            union
+            select ifnull(t1.sabun, '-'), ifnull(t1.startdt, '-'), ifnull(t1.studytype, 'G'), ifnull(t1.authcd, '-'), ifnull(t1.enddt, '-'), ifnull(t1.score, '-')
+            from (select null) t2 left outer join study_tmp t1 on t1.studytype IN ('G') and t1.score is not null
+            union
+            select ifnull(t1.sabun, '-'), ifnull(t1.startdt, '-'), ifnull(t1.studytype, 'T'), ifnull(t1.authcd, '-'), ifnull(t1.enddt, '-'), ifnull(t1.score, '-')
+            from (select null) t2 left outer join study_tmp t1 on t1.studytype IN ('T') and t1.score is not null
+            ORDER BY FIELD(studytype,'D','G','T');
+    </select>
+
+    <select id="studyDay" parameterType="String" resultType="HashMap">
+        SELECT cast(date_format(startdt, '%Y-%m-%d %T' ) as char) as startdt, score
+        FROM study
+        WHERE score is not null
+          AND sabun = #{userId}
+          AND length(enddt) > 0
+        ORDER by startdt
+    </select>
+
+    <select id="studyAuth" parameterType="String" resultType="HashMap">
+        SELECT (SELECT NM FROM auth WHERE AUTHCD = t1.authcd) as authcd
+             , count(authcd) as cnt
+        FROM study t1
+        WHERE score is not null
+          AND sabun = #{userId}
+        Group by authcd
+    </select>
+
+    <select id="noticeList" resultType="com.example.studyservice.board.model.BoardVO">
+        SELECT TITLE, cast(date_format(WRITEDT,'%Y-%m-%d') as char) WRITEDT, IDX
+          FROM board
+         WHERE GUBUN = 1
+        ORDER BY IDX DESC
+        LIMIT 4
+    </select>
+
+    <!--마이페이지 일일학습이력-->
+    <!--최종풀이날짜 최신순-->
+    <select id="myStudyDay" parameterType="String" resultType="com.example.studyservice.home.model.myStudyDayVO">
+        select ROW_NUMBER() over() as idx, A.authcd, A.authnm, A.correct, A.score, date_format(A.enddt,'%Y-%m-%d %T') as enddt
+        from (select authcd
+                   , (select nm from auth where authcd = study.authcd) authnm
+                   , round(cast(score as integer)/100*20) as correct
+                   , score
+                   , enddt
+              from study
+              where sabun = #{userId}
+                and studytype = 'D'
+                and length(enddt) > 0
+              ) A
+        order by A.enddt+0 desc
+    </select>
+    <!--마이페이지 평가학습이력-->
+    <select id="myStudyG" parameterType="String" resultType="com.example.studyservice.home.model.myStudyDayVO">
+        select ROW_NUMBER() over() as idx, A.authcd, A.authnm, A.correct, A.score, date_format(A.enddt,'%Y-%m-%d %T') as enddt
+        from (select authcd
+                   , (select nm from auth where authcd = study.authcd) authnm
+                   , round(cast(score as integer)/100*20) as correct
+                   , score
+                   , enddt
+              from study
+              where sabun = #{userId}
+                and studytype = 'G'
+                and length(enddt) > 0
+              ) A
+        order by A.enddt+0 desc
+    </select>
+    <!--마이페이지 시험응시이력-->
+    <select id="myStudyTest" parameterType="String" resultType="com.example.studyservice.home.model.myStudyDayVO">
+        select ROW_NUMBER() over() as idx, A.authcd, A.authnm, A.correct, A.score, date_format(A.enddt,'%Y-%m-%d %T') as enddt
+        from (select authcd
+                   , (select nm from auth where authcd = study.authcd) authnm
+                   , round(cast(score as integer)/100*20) as correct
+                   , score
+                   , enddt
+              from study
+              where sabun = #{userId}
+                and studytype = 'T'
+                and length(enddt) > 0
+              ) A
+        order by A.enddt+0 desc
+    </select>
+
+    <!--마이페이지 목표 달성량-->
+    <select id="goal" resultType="com.example.studyservice.home.model.goalVO">
+        select 'DAY' gubun,
+               ifnull(sum(case when studytype = 'D' then 1 end), 0) d_cnt,
+               ifnull(sum(case when studytype = 'G' then 1 end), 0) g_cnt,
+               ifnull(sum(case when studytype = 'T' then 1 end), 0) t_cnt
+        from study
+        where DATE_FORMAT(startdt,'%Y%m%d') = DATE_FORMAT(NOW(),'%Y%m%d')
+          and length(enddt) > 0
+          and sabun = #{userId}
+        UNION ALL
+        select 'MONTH',
+            ifnull(sum(case when studytype = 'D' then 1 end), 0) d_cnt,
+            ifnull(sum(case when studytype = 'G' then 1 end), 0) g_cnt,
+            ifnull(sum(case when studytype = 'T' then 1 end), 0) t_cnt
+        from study
+        where DATE_FORMAT(startdt,'%Y%m') = DATE_FORMAT(NOW(),'%Y%m')
+          and length(enddt) > 0
+          and sabun = #{userId}
+        UNION ALL
+        select 'YEAR',
+            ifnull(sum(case when studytype = 'D' then 1 end), 0) d_cnt,
+            ifnull(sum(case when studytype = 'G' then 1 end), 0) g_cnt,
+            ifnull(sum(case when studytype = 'T' then 1 end), 0) t_cnt
+        from study
+        where DATE_FORMAT(startdt,'%Y') = DATE_FORMAT(NOW(),'%Y')
+          and length(enddt) > 0
+          and sabun = #{userId}
+    </select>
+
+    <select id="ansRate" parameterType="String" resultType="com.example.studyservice.home.model.rateVO">
+        select studytype
+             , authcd
+             , (select nm from auth where authcd = study.authcd) authnm
+             , round(sum(score)/ (count(*) * 100) * 100) avg
+        from study
+        where studytype = 'D'
+          and sabun = #{userId}
+          and length(enddt) > 0
+        group by authcd
+        union all
+        select studytype
+             , authcd
+             , (select nm from auth where authcd = study.authcd) authnm
+             , round(sum(score)/ (count(*) * 100) * 100) avg
+        from study
+        where studytype = 'G'
+          and sabun = #{userId}
+          and length(enddt) > 0
+        group by authcd
+        union all
+        select studytype
+             , authcd
+             , (select nm from auth where authcd = study.authcd) authnm
+             , round(sum(score)/ (count(*) * 100) * 100) avg
+        from study
+        where studytype = 'T'
+          and sabun = #{userId}
+          and length(enddt) > 0
+        group by authcd
+    </select>
+
+    <select id="ansChkList" parameterType="String" resultType="com.example.studyservice.home.model.ansChkVO">
+         select t1.authcd
+              , t1.studytype
+              , t2.qid
+              , t2.ansyn
+              , (select ITEMID from queitem where qid = t2.qid and ANSCD = '0') ans
+              , t3.QUESTION
+              , t3.QTYPECD
+              , (select nm from quetype where quetype.QTYPECD = t3.QTYPECD)     qtypenm
+              , t3.EXPLANATION
+              , t3.LVL
+              , (select item from queitem where qid = t2.qid and ITEMID = 1)    item1
+              , (select item from queitem where qid = t2.qid and ITEMID = 2)    item2
+              , (select item from queitem where qid = t2.qid and ITEMID = 3)    item3
+              , (select item from queitem where qid = t2.qid and ITEMID = 4)    item4
+         from (select *
+               from study
+               where studytype = #{studyType}
+                 and length(enddt) > 0
+               order by startdt desc
+               limit 3) t1,
+              studyque t2,
+              question t3
+         where t1.sabun = #{userId}
+           and t1.studytype = #{studyType}
+           and t1.authcd = #{authcd}
+           and length(t1.enddt) > 0
+           and t1.startdt = t2.startdt
+           and t2.qid = t3.QID
+           and (t2.ansyn is null or t2.ansyn != (select ITEMID from queitem where qid = t2.qid and ANSCD = '0'))
+         group by t2.qid
+    </select>
+
+</mapper>

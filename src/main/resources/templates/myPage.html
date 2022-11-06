@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title></title>
+
+    <!-- Custom fonts for this template-->
+    <link href="http://13.124.0.31:9001/bootstrap/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css" />
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="http://13.124.0.31:9001/bootstrap/css/sb-admin-2.min.css" rel="stylesheet" />
+
+</head>
+<!-- Bootstrap core JavaScript-->
+<script src="http://13.124.0.31:9001/bootstrap/vendor/jquery/jquery.min.js"></script>
+<script src="http://13.124.0.31:9001/bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="http://13.124.0.31:9001/bootstrap/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="http://13.124.0.31:9001/bootstrap/js/sb-admin-2.min.js"></script>
+
+<!-- Page level plugins -->
+<script src="http://13.124.0.31:9001/bootstrap/vendor/chart.js/Chart.min.js"></script>
+<script>
+    $(document).ready(function(){
+        fnMenu1Click();
+    });
+
+
+    function fnModuleInfo(authcd, studyType) {
+        console.log(authcd+studyType);
+
+        $('#mypageModal .modal-content').load("http://52.78.161.54:8000/study-service/mypagePopup?authcd=" + authcd+"&studyType="+studyType);
+        $('#mypageModal').modal({});
+    }
+
+    function getGoal(n){
+        var b1 = $('div[name=bar1]').eq(n).text();
+        var b2 = $('div[name=bar2]').eq(n).text();
+        var b3 = $('div[name=bar3]').eq(n).text();
+        if(b1 > 1){
+            b1 = '100%';
+        }else{
+            b1 = parseInt(b1)*0.5*100 + '%';
+        }
+        if(b2 > 10){
+            b2 = '100%';
+        }else{
+            b2 = parseInt(b2)*0.1*100 + '%';
+        }
+        if(b3 > 100){
+            b3 = '100%';
+        }else{
+            b3 = parseInt(b3) + '%';
+        }
+        $('div[name=bar1]').css('width',b1);
+        $('div[name=bar2]').css('width',b2);
+        $('div[name=bar3]').css('width',b3);
+    }
+    function fnMenu1Click(){
+        $('#Contents1')[0].style.display = 'block';
+        $('#Contents2')[0].style.display = 'none';
+        $('#Contents3')[0].style.display = 'none';
+        $('#Contents4')[0].style.display = 'none';
+        getGoal(0);
+    }
+    function fnMenu2Click(){
+        $('#Contents1')[0].style.display = 'none';
+        $('#Contents2')[0].style.display = 'block';
+        $('#Contents3')[0].style.display = 'none';
+        $('#Contents4')[0].style.display = 'none';
+        getGoal(1);
+    }
+    function fnMenu3Click(){
+        $('#Contents1')[0].style.display = 'none';
+        $('#Contents2')[0].style.display = 'none';
+        $('#Contents3')[0].style.display = 'block';
+        $('#Contents4')[0].style.display = 'none';
+        getGoal(2);
+    }
+    function fnMenu4Click(){
+        $('#Contents1')[0].style.display = 'none';
+        $('#Contents2')[0].style.display = 'none';
+        $('#Contents3')[0].style.display = 'none';
+        $('#Contents4')[0].style.display = 'block';
+    }
+    function fnMenu5Click(){
+        $('#Contents1')[0].style.display = 'none';
+        $('#Contents2')[0].style.display = 'none';
+        $('#Contents3')[0].style.display = 'none';
+        $('#Contents4')[0].style.display = 'none';
+    }
+
+</script>
+<body id="page-top">
+<form name="test">
+
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <section class="content-side-bar" th:replace="common/sidebar::common-side-bar"></section>
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column" >
+
+            <!-- Main Content -->
+            <div id="content"  >
+
+                <!-- Topbar -->
+                <section class="content-top-bar" th:replace="common/topbar::common-top-bar"></section>
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">마이페이지</h1>
+                    </div>
+
+                    <div>
+                        <h6 class="h6 mb-0 text-gray-600">[[${userInfo.userName}]] 님, 마이페이지 입니다.</h6>
+                    </div>
+                    <hr style="border-bottom: #e3e6f0 1px solid">
+
+                    <!-- Content Row -->
+                    <div class="row">
+                        <div style="width: 20%; height: 700px; border-right: #aeb0b8 1px dashed;">
+                            <div class="">
+                                <div class="col-lg-6 mb-4" style="max-width: 90%"  onclick="fnMenu1Click()">
+                                    <div class="card text-white shadow" th:with="item=${dashTopDetail[0]}"
+                                         style="background: #4e73df"
+                                         onmouseover="this.style.backgroundColor='#2e59d9'"
+                                         onmouseout="this.style.backgroundColor='#4e73df'">
+                                        <div class="card-body row" style="font-size: 15px;">
+                                            <div style="padding-left: 20px;">
+                                                <span style="font-size: 16px;">일일학습이력</span>
+                                                <hr style="border-bottom: white 1px solid; margin-top: 2px;">
+                                                <div class="text-white-100 small">
+                                                    최근 이력 : <span th:text="${item.startdt}"></span><br>
+                                                    최근 학습 : <span th:text="${item.authcd}"></span><br>
+                                                </div>
+                                            </div>
+                                            <div class="fas fa-arrow-right" style="padding-top: 30px; padding-left:20px; width: 20%">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 mb-4" style="max-width: 90%"  onclick="fnMenu2Click()">
+                                    <div class="card text-white shadow" id="testtest" th:with="item=${dashTopDetail[1]}"
+                                         style="background: #1cc88a"
+                                         onmouseover="this.style.backgroundColor='#17a673'"
+                                         onmouseout="this.style.backgroundColor='#1cc88a'">
+                                        <div class="card-body row" style="font-size: 15px;">
+                                            <div style="padding-left: 20px;">
+                                                <span style="font-size: 16px;">학습평가이력</span>
+                                                <hr style="border-bottom: white 1px solid; margin-top: 2px;">
+                                                <div class="text-white-100 small">
+                                                    최근 이력 : <span th:text="${item.startdt}"></span><br>
+                                                    최근 학습 : <span th:text="${item.authcd}"></span><br>
+                                                </div>
+                                            </div>
+                                            <div class="fas fa-arrow-right" style="padding-top: 30px; padding-left:20px; width: 20%">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 mb-4" style="max-width: 90%"  onclick="fnMenu3Click()">
+                                    <div class="card text-white shadow" th:with="item=${dashTopDetail[2]}"
+                                         style="background: #f6c23e"
+                                         onmouseover="this.style.backgroundColor='#f4b619'"
+                                         onmouseout="this.style.backgroundColor='#f6c23e'">
+                                        <div class="card-body row" style="font-size: 15px;">
+                                            <div style="padding-left: 20px;">
+                                                <span style="font-size: 16px;">시험응시이력</span>
+                                                <hr style="border-bottom: white 1px solid; margin-top: 2px;">
+                                                <div class="text-white-100 small">
+                                                    최근 이력 : <span th:text="${item.startdt}"></span><br>
+                                                    최근 학습 : <span th:text="${item.authcd}"></span><br>
+                                                </div>
+                                            </div>
+                                            <div class="fas fa-arrow-right" style="padding-top: 30px; padding-left:20px; width: 20%">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+<!--                                <div class="col-lg-6 mb-4" style="max-width: 90%"  onclick="fnMenu4Click()">-->
+<!--                                    <div class="card text-white shadow"-->
+<!--                                         style="background: #f6c23e"-->
+<!--                                         onmouseover="this.style.backgroundColor='#f4b619'"-->
+<!--                                         onmouseout="this.style.backgroundColor='#f6c23e'">-->
+<!--                                        <div class="card-body row" style="font-size: 15px;">-->
+<!--                                            <div style="padding-left: 20px; width: 70%;">-->
+<!--                                                <span style="font-size: 16px;">마일리지관리</span>-->
+<!--                                            </div>-->
+<!--                                            <div class="fas fa-arrow-right" style="padding-top: 7px; padding-left:20px; width: 20%">-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="col-lg-6 mb-4" style="max-width: 90%"  onclick="fnMenu5Click()">-->
+<!--                                    <div class="card text-white shadow"-->
+<!--                                         style="background: #f6c23e"-->
+<!--                                         onmouseover="this.style.backgroundColor='#f4b619'"-->
+<!--                                         onmouseout="this.style.backgroundColor='#f6c23e'">-->
+<!--                                        <div class="card-body row" style="font-size: 15px;">-->
+<!--                                            <div style="padding-left: 20px; width: 70%;">-->
+<!--                                                <span style="font-size: 16px;">게시판 활동이력</span>-->
+<!--                                            </div>-->
+<!--                                            <div class="fas fa-arrow-right" style="padding-top: 7px; padding-left:20px; width: 20%">-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+                            </div>
+                        </div>
+
+                        <!-- Content Row -->
+                        <div class="card-body" id="Contents1"
+                             style="width: 80%; display: none" >
+                            <!-- 일일학습_이력 -->
+                            <div class="card shadow mb-4" style="width:60%; float: left;">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">일일 학습 목록</h6>
+                                </div>
+                                <div class="card-body" style="height: 625px; overflow: auto;">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered" width="100%" id="dataTable" cellspacing="0">
+                                            <thead>
+                                                <tr class="bg-primary" style="color: white">
+                                                    <th style="width: 40px;text-align: center; font-size: 17px;">번호</th>
+                                                    <th style="width: 140px;text-align: center; font-size: 17px;">구&nbsp;&nbsp;분</th>
+                                                    <th style="width: 70px; text-align: center; font-size: 17px;">분&nbsp;&nbsp;야</th>
+                                                    <th style="width: 70px;text-align: center; font-size: 17px;">정답개수</th>
+                                                    <th style="width: 90px;text-align: center; font-size: 17px;">점수</th>
+                                                    <th style="width: 120px;text-align: center; font-size: 17px;">최종제출일시</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr th:each="data: ${myStudyDay}"
+                                                    th:idx="${data.idx}"
+                                                    class="btn-light" style="height: 30px;">
+                                                    <td style="text-align: center; padding: 8.5px;" name="idx" th:text="${data.idx}"></td>
+                                                    <td style="text-align: center; padding: 8.5px;" name="day" th:text="일일학습"></td>
+                                                    <td style="text-align: center; padding: 8.5px;" name="authcd" th:text="${data.authnm}"></td>
+                                                    <td style="text-align: center; padding: 8.5px;" name="correct" th:text="${data.correct}"></td>
+                                                    <td style="text-align: center; padding: 8.5px;" name="score" th:text="${data.score}"></td>
+                                                    <td style="text-align: center; padding: 8.5px;" name="enddt" th:text="${data.enddt}"></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 일일학습_목표량 -->
+                            <div class="card shadow mb-4" style="width:35%; margin-left: 10px; float: left;">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">목표</h6>
+                                </div>
+                                <div class="card-body"  >
+                                    <h4 class="small font-weight-bold" th:with="data = ${day}">DAY<span
+                                            class="float-right" th:text="'('+${data.d_cnt}+'/2)'"></span></h4>
+                                    <div class="progress mb-4" name="bar1parent" th:with="data = ${day}">
+                                        <div class="progress-bar bg-danger" name="bar1" th:text="${data.d_cnt}" role="progressbar" style="width: 20%;"
+                                             aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <h4 class="small font-weight-bold" th:with="data = ${month}">MONTH <span
+                                            class="float-right" th:text="'('+${data.d_cnt}+'/10)'"></span></h4>
+                                    <div class="progress mb-4" name="bar2parent" th:with="data = ${month}">
+                                        <div class="progress-bar bg-warning" name="bar2" th:text="${data.d_cnt}" role="progressbar" style="width: 40%;"
+                                             aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <h4 class="small font-weight-bold" th:with="data = ${year}">YEAR <span
+                                            class="float-right"th:text="'('+${data.d_cnt}+'/100)'"></span></h4>
+                                    <div class="progress mb-4" name="bar3parent" th:with="data = ${year}">
+                                        <div class="progress-bar" name="bar3" th:text="${data.d_cnt}" role="progressbar" style="width: 60%;"
+                                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 일일학습_가이드 -->
+                            <div class="card shadow mb-4" style="width:35%; margin-left: 10px; float: left;">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">가이드</h6>
+                                </div>
+                                <div class="card-body" style="height: 317px; overflow: auto;">
+                                    *분야별 최근 3회의 데이터를 기준으로 통계됩니다.
+                                    <table class="table table-bordered" width="100%" id="dataTable" cellspacing="0">
+                                        <thead>
+                                        <tr class="bg-primary" style="color: white">
+                                            <th style="width: 35%; text-align: center; font-size: 13px;">분&nbsp;&nbsp;야</th>
+                                            <th style="width: 30%;text-align: center; font-size: 13px;">정답률</th>
+                                            <th style="width: 35%;text-align: center; font-size: 13px;">오답풀이</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="data: ${DRate}"
+                                            class="btn-light" style="height: 30px;">
+                                            <td style="text-align: center; padding: 8.5px;" name="rateAuthnm" th:text="${data.authnm}"></td>
+                                            <td style="text-align: center; padding: 8.5px;" name="rateAvg" th:text="${data.avg}+'%'"></td>
+                                            <td style="text-align: center; padding: 8.5px;" name="rateDetail">
+                                                <a class="btn btn-outline-primary btn-icon-split"
+                                                   th:attr="onclick=|fnModuleInfo('${data.authcd}','D')|"
+                                                   style="height: 25px; font-size: 13px;"/>
+                                                <span class="text">오답보기</span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body" id="Contents2"
+                             style="width: 80%; display: none" >
+                            <!-- 평가학습_이력 -->
+                            <div class="card shadow mb-4" style="width:60%; float: left;">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">평가 학습 목록</h6>
+                                </div>
+                                <div class="card-body" style="height: 625px; overflow: auto;">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered" width="100%" id="dataTable" cellspacing="0">
+                                            <thead>
+                                                <tr class="bg-primary" style="color: white">
+                                                    <th style="width: 40px;text-align: center; font-size: 17px;">번호</th>
+                                                    <th style="width: 140px;text-align: center; font-size: 17px;">구&nbsp;&nbsp;분</th>
+                                                    <th style="width: 70px; text-align: center; font-size: 17px;">분&nbsp;&nbsp;야</th>
+                                                    <th style="width: 70px;text-align: center; font-size: 17px;">정답개수</th>
+                                                    <th style="width: 90px;text-align: center; font-size: 17px;">점수</th>
+                                                    <th style="width: 120px;text-align: center; font-size: 17px;">최종제출일시</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr th:each="data: ${myStudyG}"
+                                                    th:idx="${data.idx}"
+                                                    class="btn-light" style="height: 30px;">
+                                                    <td style="text-align: center; padding: 8.5px;" name="idx" th:text="${data.idx}"></td>
+                                                    <td style="text-align: center; padding: 8.5px;" name="day" th:text="평가학습"></td>
+                                                    <td style="text-align: center; padding: 8.5px;" name="authcd" th:text="${data.authnm}"></td>
+                                                    <td style="text-align: center; padding: 8.5px;" name="correct" th:text="${data.correct}"></td>
+                                                    <td style="text-align: center; padding: 8.5px;" name="score" th:text="${data.score}"></td>
+                                                    <td style="text-align: center; padding: 8.5px;" name="enddt" th:text="${data.enddt}"></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 평가학습_목표량 -->
+                            <div class="card shadow mb-4" style="width:35%; margin-left: 10px; float: left;">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">목표</h6>
+                                </div>
+                                <div class="card-body" >
+                                    <h4 class="small font-weight-bold" th:with="data = ${day}">DAY<span
+                                            class="float-right" th:text="'('+${data.g_cnt}+'/2)'"></span></h4>
+                                    <div class="progress mb-4" name="bar1parent" th:with="data = ${day}">
+                                        <div class="progress-bar bg-danger" name="bar1" th:text="${data.g_cnt}" role="progressbar" style="width: 20%;"
+                                             aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <h4 class="small font-weight-bold" th:with="data = ${month}">MONTH <span
+                                            class="float-right" th:text="'('+${data.g_cnt}+'/10)'"></span></h4>
+                                    <div class="progress mb-4" name="bar2parent" th:with="data = ${month}">
+                                        <div class="progress-bar bg-warning" name="bar2" th:text="${data.g_cnt}" role="progressbar" style="width: 40%;"
+                                             aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <h4 class="small font-weight-bold" th:with="data = ${year}">YEAR <span
+                                            class="float-right"th:text="'('+${data.g_cnt}+'/100)'"></span></h4>
+                                    <div class="progress mb-4" name="bar3parent" th:with="data = ${year}">
+                                        <div class="progress-bar" name="bar3" th:text="${data.g_cnt}" role="progressbar" style="width: 60%;"
+                                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 평가학습_가이드 -->
+                            <div class="card shadow mb-4" style="width:35%; margin-left: 10px; float: left;">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">가이드</h6>
+                                </div>
+                                <div class="card-body" style="height: 317px; overflow: auto;">
+                                    *분야별 최근 3회의 데이터를 기준으로 통계됩니다.
+                                    <table class="table table-bordered" width="100%" id="dataTable" cellspacing="0">
+                                        <thead>
+                                        <tr class="bg-primary" style="color: white">
+                                            <th style="width: 35%; text-align: center; font-size: 13px;">분&nbsp;&nbsp;야</th>
+                                            <th style="width: 30%;text-align: center; font-size: 13px;">정답률</th>
+                                            <th style="width: 35%;text-align: center; font-size: 13px;">오답풀이</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="data: ${GRate}"
+                                            class="btn-light" style="height: 30px;">
+                                            <td style="text-align: center; padding: 8.5px;" name="rateAuthnm" th:text="${data.authnm}"></td>
+                                            <td style="text-align: center; padding: 8.5px;" name="rateAvg" th:text="${data.avg}+'%'"></td>
+                                            <td style="text-align: center; padding: 8.5px;" name="rateDetail">
+                                                <a class="btn btn-outline-primary btn-icon-split"
+                                                   th:attr="onclick=|fnModuleInfo('${data.authcd}','G')|"
+                                                   style="height: 25px; font-size: 13px;"/>
+                                                <span class="text">오답보기</span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body" id="Contents3"
+                             style="width: 80%; display: none" >
+                            <!-- Project Card Example -->
+                            <div class="card shadow mb-4" style="width:60%; float: left;">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">시험 응시 목록</h6>
+                                </div>
+                                <div class="card-body" style="height: 625px; overflow: auto;">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered" width="100%" id="dataTable" cellspacing="0">
+                                            <thead>
+                                            <tr class="bg-primary" style="color: white">
+                                                <th style="width: 40px;text-align: center; font-size: 17px;">번호</th>
+                                                <th style="width: 140px;text-align: center; font-size: 17px;">구&nbsp;&nbsp;분</th>
+                                                <th style="width: 70px; text-align: center; font-size: 17px;">분&nbsp;&nbsp;야</th>
+                                                <th style="width: 70px;text-align: center; font-size: 17px;">정답개수</th>
+                                                <th style="width: 90px;text-align: center; font-size: 17px;">점수</th>
+                                                <th style="width: 120px;text-align: center; font-size: 17px;">시험제출일시</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="data: ${myStudyTest}"
+                                                th:idx="${data.idx}"
+                                                class="btn-light" style="height: 30px;">
+                                                <td style="text-align: center; padding: 8.5px;" id="eun" name="idx" th:text="${data.idx}"></td>
+                                                <td style="text-align: center; padding: 8.5px;" name="day" th:text="시험응시"></td>
+                                                <td style="text-align: center; padding: 8.5px;" name="authcd" th:text="${data.authnm}"></td>
+                                                <td style="text-align: center; padding: 8.5px;" name="correct" th:text="${data.correct}"></td>
+                                                <td style="text-align: center; padding: 8.5px;" name="score" th:text="${data.score}"></td>
+                                                <td style="text-align: center; padding: 8.5px;" name="enddt" th:text="${data.enddt}"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 시험응시_목표량 -->
+                            <div class="card shadow mb-4" style="width:35%; margin-left: 10px; float: left;">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">목표</h6>
+                                </div>
+                                <div class="card-body" >
+                                    <h4 class="small font-weight-bold" th:with="data = ${day}">DAY<span
+                                            class="float-right" th:text="'('+${data.t_cnt}+'/2)'"></span></h4>
+                                    <div class="progress mb-4" name="bar1parent" th:with="data = ${day}">
+                                        <div class="progress-bar bg-danger" name="bar1" th:text="${data.t_cnt}" role="progressbar" style="width: 20%;"
+                                             aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <h4 class="small font-weight-bold" th:with="data = ${month}">MONTH <span
+                                            class="float-right" th:text="'('+${data.t_cnt}+'/10)'"></span></h4>
+                                    <div class="progress mb-4" name="bar2parent" th:with="data = ${month}">
+                                        <div class="progress-bar bg-warning" name="bar2" th:text="${data.t_cnt}" role="progressbar" style="width: 40%;"
+                                             aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <h4 class="small font-weight-bold" th:with="data = ${year}">YEAR <span
+                                            class="float-right"th:text="'('+${data.t_cnt}+'/100)'"></span></h4>
+                                    <div class="progress mb-4" name="bar3parent" th:with="data = ${year}">
+                                        <div class="progress-bar" name="bar3" th:text="${data.t_cnt}" role="progressbar" style="width: 60%;"
+                                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 시험응시_가이드 -->
+                            <div class="card shadow mb-4" style="width:35%; margin-left: 10px; float: left;">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">가이드</h6>
+                                </div>
+                                <div class="card-body" style="height: 317px; overflow: auto;">
+                                    *분야별 최근 3회의 데이터를 기준으로 통계됩니다.
+                                    <table class="table table-bordered" width="100%" id="dataTable" cellspacing="0">
+                                        <thead>
+                                        <tr class="bg-primary" style="color: white">
+                                            <th style="width: 35%; text-align: center; font-size: 13px;">분&nbsp;&nbsp;야</th>
+                                            <th style="width: 30%;text-align: center; font-size: 13px;">정답률</th>
+                                            <th style="width: 35%;text-align: center; font-size: 13px;">오답풀이</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="data: ${TRate}"
+                                            class="btn-light" style="height: 30px;">
+                                            <td style="text-align: center; padding: 8.5px;" name="rateAuthnm" th:text="${data.authnm}"></td>
+                                            <td style="text-align: center; padding: 8.5px;" name="rateAvg" th:text="${data.avg}+'%'"></td>
+                                            <td style="text-align: center; padding: 8.5px;" name="rateDetail">
+                                                <a class="btn btn-outline-primary btn-icon-split"
+                                                   th:attr="onclick=|fnModuleInfo('${data.authcd}','T')|"
+                                                style="height: 25px; font-size: 13px;"/>
+                                                <span class="text">오답보기</span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body" id="Contents4"
+                             style="width: 80%; display: none" >
+                            <!-- Content Column -->
+                            <div class="col-lg-6 mb-4">
+                                <!-- Project Card Example -->
+                                <div class="card shadow mb-4">
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold text-primary">Goals44444</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <h4 class="small font-weight-bold">DAY<span
+                                                class="float-right">20%</span></h4>
+                                        <div class="progress mb-4">
+                                            <div class="progress-bar bg-danger" role="progressbar" style="width: 20%"
+                                                 aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <h4 class="small font-weight-bold">MONTH <span
+                                                class="float-right">40%</span></h4>
+                                        <div class="progress mb-4">
+                                            <div class="progress-bar bg-warning" role="progressbar" style="width: 40%"
+                                                 aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <h4 class="small font-weight-bold">YEAR <span
+                                                class="float-right">60%</span></h4>
+                                        <div class="progress mb-4">
+                                            <div class="progress-bar" role="progressbar" style="width: 60%"
+                                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- mypageModal-->
+                    <div class="modal fade" id="mypageModal" tabindex="-1" role="dialog"
+                         aria-labelledby="historyModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-xl" role="document">
+                            <div class="modal-content">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <section class="content-footer-bar" th:replace="common/footer::common-footer-bar"></section>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+
+    </div>
+    <!-- End of Page Wrapper -->
+</form>
+</body>
+
+</html>
