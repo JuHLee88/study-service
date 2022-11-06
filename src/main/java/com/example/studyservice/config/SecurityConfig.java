@@ -28,7 +28,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/userAccess").hasRole("ADMIN")
                     .and()
                 .formLogin()
-                    .loginPage("/login")
+                    .loginPage("http://52.78.161.54:8000/study-service/login")
                     .loginProcessingUrl("http://52.78.161.54:8000/study-service/login")
                     .defaultSuccessUrl("http://52.78.161.54:8000/study-service/dashboard")
 //                    .defaultSuccessUrl("http://127.0.0.1:8000/study-service/dashboard")
