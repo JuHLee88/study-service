@@ -7,7 +7,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-@EnableWebMvc
 public class StudyServiceApplication {
 
     public static void main(String[] args) {
