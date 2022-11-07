@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -45,9 +46,7 @@ public class HomeController {
      * 로그인처리
      */
     @PostMapping("/login")
-    public ModelAndView logi(Model model) {
-        ModelAndView mav = new ModelAndView("dashboard");
-        return mav;
+    public void access(Model model, Authentication authentication, HttpServletRequest request) {
     }
 
 
@@ -89,20 +88,29 @@ public class HomeController {
      */
     @GetMapping("/dashboard")
     @Timed(value = "study.dashboard",longTask = true)
-    public ModelAndView dashboard(Model model, Authentication authentication) {
+    public ModelAndView dashboard(Model model, Authentication authentication, HttpServletRequest request) {
         ModelAndView mav = new ModelAndView("dashboard");
 
+
+        System.out.println("::::::::::::::::::::::     "+request.getParameter("username"));
+        System.out.println("::::::::::::::::::::::     "+request.getParameter("password"));
+
+        HttpSession session = request.getSession();
+        UserVO userVo = userService.loadUserByUsername(request.getParameter("username"));
+        session.setAttribute("userInfo",userVo);
+
         //Authentication 객체를 통해 유저 정보를 가져올 수 있다.
-        UserVO userVo = (UserVO) authentication.getPrincipal();  //userDetail 객체를 가져옴
-        System.out.println(userVo.toString());
+//        UserVO userVo = (UserVO) authentication.getPrincipal();  //userDetail 객체를 가져옴
+//        UserVO userVo =(UserVO)session.getAttribute("userInfo");
+        System.out.println("dashboard :::::::::::  "+userVo.toString());
         model.addAttribute("userInfo", userVo);      //유저 아이디
 
         //메뉴타입
         model.addAttribute("menu_nm","dashboard");
 
         //대쉬보드 학습이력
-//        String userId = userVo.getUserId();
-        String userId = "162073";
+        String userId = userVo.getUserId();
+//        String userId = "162073";
         List<StudyVO> dashTopDetail = homeService.dashTopDetail(userId);
         System.out.println(dashTopDetail.toString());
         model.addAttribute("dashTopDetail",dashTopDetail);
@@ -164,11 +172,12 @@ public class HomeController {
      */
     @GetMapping("/mypage")
     @Timed(value = "study.mypage",longTask = true)
-    public ModelAndView mypage(Model model, Authentication authentication) {
+    public ModelAndView mypage(Model model, Authentication authentication, HttpSession session) {
         ModelAndView mav = new ModelAndView("myPage");
 
         //Authentication 객체를 통해 유저 정보를 가져올 수 있다.
-        UserVO userVo = (UserVO) authentication.getPrincipal();  //userDetail 객체를 가져옴
+//        UserVO userVo = (UserVO) authentication.getPrincipal();  //userDetail 객체를 가져옴
+        UserVO userVo = (UserVO)session.getAttribute("userInfo");
         System.out.println(userVo.toString());
         model.addAttribute("userInfo", userVo);      //유저 아이디
 
