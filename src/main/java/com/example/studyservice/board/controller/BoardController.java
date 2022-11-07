@@ -3,6 +3,7 @@ package com.example.studyservice.board.controller;
 import java.time.LocalDate;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import com.example.studyservice.board.model.BoardListVO;
 import com.example.studyservice.board.model.BoardVO;
@@ -25,11 +26,12 @@ public class BoardController {
 
     @GetMapping("/board")
     @Timed(value = "study.board",longTask = true)
-    public ModelAndView boardList(Authentication authentication, Model model, HttpServletRequest request){
+    public ModelAndView boardList(Authentication authentication, Model model, HttpServletRequest request,HttpSession session){
         ModelAndView mav = new ModelAndView("board/board");
 
         //Authentication 객체를 통해 유저 정보를 가져올 수 있다.
-        UserVO userVo = (UserVO) authentication.getPrincipal();  //userDetail 객체를 가져옴
+        UserVO userVo = (UserVO)session.getAttribute("userInfo");
+//        UserVO userVo = (UserVO) authentication.getPrincipal();  //userDetail 객체를 가져옴
         System.out.println(userVo.toString());
         model.addAttribute("userInfo", userVo);      //유저 아이디
 
@@ -46,12 +48,13 @@ public class BoardController {
     //디테일 화면, 댓글 가져오기
     @GetMapping("/board/boardDetail/{idx}")
     public ModelAndView boardDetail(@PathVariable("idx") int idx, Authentication authentication, Model model
-            , HttpServletRequest request){
+            , HttpServletRequest request,HttpSession session){
 
         ModelAndView mav = new ModelAndView("board/boardDetail");
 
         //Authentication 객체를 통해 유저 정보를 가져올 수 있다.
-        UserVO userVo = (UserVO) authentication.getPrincipal();  //userDetail 객체를 가져옴
+        UserVO userVo = (UserVO)session.getAttribute("userInfo");
+//        UserVO userVo = (UserVO) authentication.getPrincipal();  //userDetail 객체를 가져옴
         System.out.println(userVo.toString());
         model.addAttribute("userInfo", userVo);      //유저 아이디
 
@@ -71,12 +74,14 @@ public class BoardController {
     }
     //디테일 화면에서 댓글쓰기
     @PostMapping(value="/board/boardDetail")
-    public ModelAndView boardReplyWritePost(Authentication authentication, Model model, HttpServletRequest request, int idx, String replyContent){
+    public ModelAndView boardReplyWritePost(Authentication authentication, Model model, HttpServletRequest request
+            , HttpSession session, int idx, String replyContent){
             //, @ModelAttribute ReplyVO reply){
         ModelAndView mav = new ModelAndView("board/boardDetail");
 
         //Authentication 객체를 통해 유저 정보를 가져올 수 있다.
-        UserVO userVo = (UserVO) authentication.getPrincipal();  //userDetail 객체를 가져옴
+        UserVO userVo = (UserVO)session.getAttribute("userInfo");
+//        UserVO userVo = (UserVO) authentication.getPrincipal();  //userDetail 객체를 가져옴
         System.out.println(userVo.toString());
         model.addAttribute("userInfo", userVo);      //유저 아이디
 
@@ -113,11 +118,13 @@ public class BoardController {
 
     @RequestMapping(value="/board/boardWrite", method={RequestMethod.POST})
     @Timed(value = "study.boardWrite",longTask = true)
-    public ModelAndView boardWritePost(Authentication authentication, Model model, HttpServletRequest request, @ModelAttribute BoardVO write){
+    public ModelAndView boardWritePost(Authentication authentication, Model model, HttpServletRequest request
+            ,HttpSession session, @ModelAttribute BoardVO write){
         ModelAndView mav = new ModelAndView("board/board");
 
         //Authentication 객체를 통해 유저 정보를 가져올 수 있다.
-        UserVO userVo = (UserVO) authentication.getPrincipal();  //userDetail 객체를 가져옴
+        UserVO userVo = (UserVO)session.getAttribute("userInfo");
+//        UserVO userVo = (UserVO) authentication.getPrincipal();  //userDetail 객체를 가져옴
         System.out.println(userVo.toString());
         model.addAttribute("userInfo", userVo);      //유저 아이디
 
@@ -152,11 +159,13 @@ public class BoardController {
     }
     //게시물 등록 누르면 게시판 리스트로 이동
     @RequestMapping(value="/board/boardWrite", method={RequestMethod.GET})
-    public ModelAndView boardWriteGet(Authentication authentication, Model model, HttpServletRequest request, @ModelAttribute BoardVO write){
+    public ModelAndView boardWriteGet(Authentication authentication, Model model, HttpServletRequest request
+            ,HttpSession session, @ModelAttribute BoardVO write){
         ModelAndView mav = new ModelAndView("board/boardWrite");
 
         //Authentication 객체를 통해 유저 정보를 가져올 수 있다.
-        UserVO userVo = (UserVO) authentication.getPrincipal();  //userDetail 객체를 가져옴
+        UserVO userVo = (UserVO)session.getAttribute("userInfo");
+//        UserVO userVo = (UserVO) authentication.getPrincipal();  //userDetail 객체를 가져옴
         System.out.println(userVo.toString());
         model.addAttribute("userInfo", userVo);      //유저 아이디
 

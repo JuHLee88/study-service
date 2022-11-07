@@ -2,6 +2,7 @@ package com.example.studyservice.queType.controller;
 
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import com.example.studyservice.queType.model.QueListVO;
 import com.example.studyservice.queType.model.QueTypeVO;
@@ -24,13 +25,14 @@ public class QueTypeController {
 
     @GetMapping("/queTypeListDetail/{authcd}")
     public ModelAndView queTypeListDetail(@PathVariable("authcd") String authcd, Authentication authentication, Model model
-            , HttpServletRequest request) {
+            , HttpServletRequest request,HttpSession session) {
 
         ModelAndView mav = new ModelAndView("queType/queTypeList");
         model.addAttribute("menu_nm", "queTypeList");
 
         //Authentication 객체를 통해 유저 정보를 가져올 수 있다.
-        UserVO userVo = (UserVO) authentication.getPrincipal();  //userDetail 객체를 가져옴
+        UserVO userVo = (UserVO)session.getAttribute("userInfo");
+//        UserVO userVo = (UserVO) authentication.getPrincipal();  //userDetail 객체를 가져옴
         model.addAttribute("userInfo", userVo);      //유저 아이디
         System.out.println("user====" + userVo.toString());
 
@@ -50,7 +52,7 @@ public class QueTypeController {
 // 문제 출력 호출
     @GetMapping("/queListPrint")
     public ModelAndView queListPrint(@RequestParam String qtypecd,@RequestParam String authcd,
-            Authentication authentication, Model model, HttpServletRequest request) {
+            Authentication authentication, Model model, HttpServletRequest request,HttpSession session) {
 
         ModelAndView mav = new ModelAndView("queType/popup/queTypeModal");
         System.out.println("queListPrint#############################################");
@@ -59,7 +61,8 @@ public class QueTypeController {
         model.addAttribute("menu_nm", "queListPrint");
 
         //Authentication 객체를 통해 유저 정보를 가져올 수 있다.
-        UserVO userVo = (UserVO) authentication.getPrincipal();  //userDetail 객체를 가져옴
+//        UserVO userVo = (UserVO) authentication.getPrincipal();  //userDetail 객체를 가져옴
+        UserVO userVo = (UserVO)session.getAttribute("userInfo");
         model.addAttribute("userInfo", userVo);      //유저 아이디
         System.out.println("user22====" + userVo.toString());
 
@@ -82,12 +85,13 @@ public class QueTypeController {
 
     @GetMapping("/queTypeList")
     @Timed(value = "study.queTypeList",longTask = true)
-    public ModelAndView queTypeList(Model model, HttpServletRequest request, Authentication authentication) {
+    public ModelAndView queTypeList(Model model, HttpServletRequest request, Authentication authentication, HttpSession session) {
         ModelAndView mav = new ModelAndView("queType/queTypeList");
         model.addAttribute("menu_nm", "queTypeList");
 
         //Authentication 객체를 통해 유저 정보를 가져올 수 있다.
-        UserVO userVo = (UserVO) authentication.getPrincipal();  //userDetail 객체를 가져옴
+        UserVO userVo = (UserVO)session.getAttribute("userInfo");
+//        UserVO userVo = (UserVO) authentication.getPrincipal();  //userDetail 객체를 가져옴
         model.addAttribute("userInfo", userVo);      //유저 아이디
         System.out.println("user====" + userVo.toString());
 

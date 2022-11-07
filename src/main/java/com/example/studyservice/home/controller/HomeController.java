@@ -339,12 +339,13 @@ public class HomeController {
     //문제등록 - 문제상세내역
     @GetMapping("/mypagePopup")
     public ModelAndView mypagePopup(@RequestParam String authcd,@RequestParam String studyType, Model model
-            , HttpServletRequest request, Authentication authentication) {
+            , HttpServletRequest request, Authentication authentication,HttpSession session) {
 
         ModelAndView mav = new ModelAndView("mypageModal");
 
         //Authentication 객체를 통해 유저 정보를 가져올 수 있다.
-        UserVO userVo = (UserVO) authentication.getPrincipal();  //userDetail 객체를 가져옴
+        UserVO userVo = (UserVO)session.getAttribute("userInfo");
+//        UserVO userVo = (UserVO) authentication.getPrincipal();  //userDetail 객체를 가져옴
 
         //메뉴타입
         model.addAttribute("menu_nm", "queGen");

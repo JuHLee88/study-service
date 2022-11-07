@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -27,12 +28,13 @@ public class ExamController {
 
     @GetMapping("/dailyExam")
     @Timed(value = "study.dailyExam",longTask = true)
-    public ModelAndView dailyExamList(Model model, HttpServletRequest request, Authentication authentication ){
+    public ModelAndView dailyExamList(Model model, HttpServletRequest request, Authentication authentication, HttpSession session ){
         ModelAndView mav = new ModelAndView("exam/dailyExam");
         model.addAttribute("menu_nm","dailyExam");
 
         //Authentication 객체를 통해 유저 정보를 가져올 수 있다.
-        UserVO userVo = (UserVO) authentication.getPrincipal();  //userDetail 객체를 가져옴
+        UserVO userVo = (UserVO)session.getAttribute("userInfo");
+//        UserVO userVo = (UserVO) authentication.getPrincipal();  //userDetail 객체를 가져옴
         model.addAttribute("userInfo", userVo);      //유저 아이디
 
         //일일학습 학습항목리스트
@@ -45,11 +47,13 @@ public class ExamController {
 
     @PostMapping(value = "/dailyExam/dailyExamModal/{direction}")
     @ResponseBody
-    public HashMap<String, Object> dailyExamListNext(@PathVariable String direction,StudyQueVO studyQueVO, Model model, Authentication authentication ){
+    public HashMap<String, Object> dailyExamListNext(@PathVariable String direction,StudyQueVO studyQueVO, Model model
+            ,HttpSession session, Authentication authentication ){
         System.out.println("***********************"+direction);
 
         //Authentication 객체를 통해 유저 정보를 가져올 수 있다.
-        UserVO userVo = (UserVO) authentication.getPrincipal();  //userDetail 객체를 가져옴
+        UserVO userVo = (UserVO)session.getAttribute("userInfo");
+//        UserVO userVo = (UserVO) authentication.getPrincipal();  //userDetail 객체를 가져옴
         studyQueVO.setSabun(userVo.getUserId());
 
         //현재문제 정답저장
@@ -96,12 +100,14 @@ public class ExamController {
     }
 
     @GetMapping("/dailyExam/dailyExamModal")
-    public ModelAndView dailyExamList(@RequestParam String auth,@RequestParam String authNm, Model model, Authentication authentication ){
+    public ModelAndView dailyExamList(@RequestParam String auth,@RequestParam String authNm, Model model
+            ,HttpSession session, Authentication authentication ){
         ModelAndView mav = new ModelAndView("exam/popup/dailyExamModal");
         model.addAttribute("authNm",authNm);
 
         //Authentication 객체를 통해 유저 정보를 가져올 수 있다.
-        UserVO userVo = (UserVO) authentication.getPrincipal();  //userDetail 객체를 가져옴
+        UserVO userVo = (UserVO)session.getAttribute("userInfo");
+//        UserVO userVo = (UserVO) authentication.getPrincipal();  //userDetail 객체를 가져옴
         model.addAttribute("userInfo", userVo);      //유저 아이디
 
         //출제문제 개인 학습이력에 추가 (study, studyQue, studyQueItem)
@@ -159,12 +165,13 @@ public class ExamController {
 
     @GetMapping("/realExam")
     @Timed(value = "study.realExam",longTask = true)
-    public ModelAndView realExamList(Model model, HttpServletRequest request, Authentication authentication){
+    public ModelAndView realExamList(Model model, HttpServletRequest request, Authentication authentication,HttpSession session){
         ModelAndView mav = new ModelAndView("exam/realExam");
         model.addAttribute("menu_nm","realExam");
 
         //Authentication 객체를 통해 유저 정보를 가져올 수 있다.
-        UserVO userVo = (UserVO) authentication.getPrincipal();  //userDetail 객체를 가져옴
+        UserVO userVo = (UserVO)session.getAttribute("userInfo");
+//        UserVO userVo = (UserVO) authentication.getPrincipal();  //userDetail 객체를 가져옴
         model.addAttribute("userInfo", userVo);      //유저 아이디
 
         //평가학습 학습항목리스트
@@ -176,12 +183,14 @@ public class ExamController {
     }
 
     @GetMapping("/realExam/realExamModal")
-    public ModelAndView realExamList(@RequestParam String auth,@RequestParam String authNm, Model model, Authentication authentication ){
+    public ModelAndView realExamList(@RequestParam String auth,@RequestParam String authNm, Model model
+            ,HttpSession session, Authentication authentication ){
         ModelAndView mav = new ModelAndView("exam/popup/realExamModal");
         model.addAttribute("authNm",authNm);
 
         //Authentication 객체를 통해 유저 정보를 가져올 수 있다.
-        UserVO userVo = (UserVO) authentication.getPrincipal();  //userDetail 객체를 가져옴
+        UserVO userVo = (UserVO)session.getAttribute("userInfo");
+//        UserVO userVo = (UserVO) authentication.getPrincipal();  //userDetail 객체를 가져옴
         model.addAttribute("userInfo", userVo);      //유저 아이디
 
         //출제문제 개인 학습이력에 추가 (study, studyQue, studyQueItem)
@@ -239,11 +248,13 @@ public class ExamController {
 
     @PostMapping(value = "/realExam/realExamModal/{direction}")
     @ResponseBody
-    public HashMap<String, Object> realExamListNext(@PathVariable String direction,StudyQueVO studyQueVO, Model model, Authentication authentication ){
+    public HashMap<String, Object> realExamListNext(@PathVariable String direction,StudyQueVO studyQueVO, Model model
+            ,HttpSession session, Authentication authentication ){
         System.out.println("***********************"+direction);
 
         //Authentication 객체를 통해 유저 정보를 가져올 수 있다.
-        UserVO userVo = (UserVO) authentication.getPrincipal();  //userDetail 객체를 가져옴
+        UserVO userVo = (UserVO)session.getAttribute("userInfo");
+//        UserVO userVo = (UserVO) authentication.getPrincipal();  //userDetail 객체를 가져옴
         studyQueVO.setSabun(userVo.getUserId());
 
         //현재문제 정답저장
@@ -291,12 +302,13 @@ public class ExamController {
 
     @GetMapping("/evalExam")
     @Timed(value = "study.evalExam",longTask = true)
-    public ModelAndView evalExamList(Model model, HttpServletRequest request, Authentication authentication){
+    public ModelAndView evalExamList(Model model, HttpServletRequest request, Authentication authentication,HttpSession session){
         ModelAndView mav = new ModelAndView("exam/evalExam");
         model.addAttribute("menu_nm","evalExam");
 
         //Authentication 객체를 통해 유저 정보를 가져올 수 있다.
-        UserVO userVo = (UserVO) authentication.getPrincipal();  //userDetail 객체를 가져옴
+        UserVO userVo = (UserVO)session.getAttribute("userInfo");
+//        UserVO userVo = (UserVO) authentication.getPrincipal();  //userDetail 객체를 가져옴
         model.addAttribute("userInfo", userVo);      //유저 아이디
 
         //일일학습 학습항목리스트
@@ -323,12 +335,14 @@ public class ExamController {
 
 
     @GetMapping("/evalExam/evalExamModal")
-    public ModelAndView evalExamList(@RequestParam String auth,@RequestParam String authNm, Model model, Authentication authentication ){
+    public ModelAndView evalExamList(@RequestParam String auth,@RequestParam String authNm, Model model
+            ,HttpSession session, Authentication authentication ){
         ModelAndView mav = new ModelAndView("exam/popup/evalExamModal");
         model.addAttribute("authNm",authNm);
 
         //Authentication 객체를 통해 유저 정보를 가져올 수 있다.
-        UserVO userVo = (UserVO) authentication.getPrincipal();  //userDetail 객체를 가져옴
+        UserVO userVo = (UserVO)session.getAttribute("userInfo");
+//        UserVO userVo = (UserVO) authentication.getPrincipal();  //userDetail 객체를 가져옴
         model.addAttribute("userInfo", userVo);      //유저 아이디
 
         //출제문제 개인 학습이력에 추가 (study, studyQue, studyQueItem)
@@ -386,11 +400,13 @@ public class ExamController {
 
     @PostMapping(value = "/evalExam/evalExamModal/{direction}")
     @ResponseBody
-    public HashMap<String, Object> evalExamListNext(@PathVariable String direction,StudyQueVO studyQueVO, Model model, Authentication authentication ){
+    public HashMap<String, Object> evalExamListNext(@PathVariable String direction,StudyQueVO studyQueVO, Model model
+            ,HttpSession session, Authentication authentication ){
         System.out.println("***********************"+direction);
 
         //Authentication 객체를 통해 유저 정보를 가져올 수 있다.
-        UserVO userVo = (UserVO) authentication.getPrincipal();  //userDetail 객체를 가져옴
+        UserVO userVo = (UserVO)session.getAttribute("userInfo");
+//        UserVO userVo = (UserVO) authentication.getPrincipal();  //userDetail 객체를 가져옴
         studyQueVO.setSabun(userVo.getUserId());
 
         //현재문제 정답저장
