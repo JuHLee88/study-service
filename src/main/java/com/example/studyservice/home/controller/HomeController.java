@@ -42,13 +42,6 @@ public class HomeController {
         return mav;
     }
 
-    /**
-     * 로그인처리
-     */
-    @PostMapping("/login")
-    public void access(Model model, Authentication authentication, HttpServletRequest request) {
-    }
-
 
     /**
      * 회원등록양식
@@ -86,7 +79,7 @@ public class HomeController {
     /**
      * 로그인성공
      */
-    @GetMapping("/dashboard")
+    @PostMapping("/dashboard")
     @Timed(value = "study.dashboard",longTask = true)
     public ModelAndView dashboard(Model model, Authentication authentication, HttpServletRequest request) {
         ModelAndView mav = new ModelAndView("dashboard");
@@ -102,6 +95,68 @@ public class HomeController {
         //Authentication 객체를 통해 유저 정보를 가져올 수 있다.
 //        UserVO userVo = (UserVO) authentication.getPrincipal();  //userDetail 객체를 가져옴
 //        UserVO userVo =(UserVO)session.getAttribute("userInfo");
+        System.out.println("dashboard :::::::::::  "+userVo.toString());
+        model.addAttribute("userInfo", userVo);      //유저 아이디
+
+        //메뉴타입
+        model.addAttribute("menu_nm","dashboard");
+
+        //대쉬보드 학습이력
+        String userId = userVo.getUserId();
+//        String userId = "162073";
+        List<StudyVO> dashTopDetail = homeService.dashTopDetail(userId);
+        System.out.println(dashTopDetail.toString());
+        model.addAttribute("dashTopDetail",dashTopDetail);
+
+        //대쉬보드 차트1
+        ArrayList<HashMap<String,String>> studyDay = homeService.studyDay(userId);
+        System.out.println(studyDay.toString());
+        List<String> scoreList = new ArrayList<>();
+        List<String> dayList = new ArrayList<>();
+        for (HashMap itemList : studyDay ){
+            scoreList.add((String) itemList.get("score"));
+            dayList.add((String) itemList.get("startdt"));
+        }
+        System.out.println(scoreList.toString());
+        System.out.println(dayList.toString());
+        model.addAttribute("dayList",dayList);
+        model.addAttribute("scoreList",scoreList);
+
+        //대쉬보드 차트2
+        ArrayList<HashMap<String,Integer>> studyAuth = homeService.studyAuth(userId);
+        System.out.println(studyAuth.toString());
+        List<String> authList = new ArrayList<>();
+        List<Integer> countList = new ArrayList<>();
+        for (HashMap itemList : studyAuth ){
+            authList.add((String) itemList.get("authcd"));
+            countList.add(Integer.parseInt(String.valueOf(itemList.get("cnt"))));
+        }
+        System.out.println(authList.toString());
+        System.out.println(countList.toString());
+        model.addAttribute("authList",authList);
+        model.addAttribute("countList",countList);
+
+
+        //공지사항 리스트
+        List<BoardVO> noticeList = homeService.noticeList();
+        System.out.println("::noticeList:::::::::::::"+noticeList.toString());
+        model.addAttribute("noticeList",noticeList);
+
+        return mav;
+    }
+
+    /**
+     * 로그인성공
+     */
+    @GetMapping("/dashboard")
+    @Timed(value = "study.dashboard",longTask = true)
+    public ModelAndView dashboard(Model model, HttpServletRequest request,HttpSession session) {
+        ModelAndView mav = new ModelAndView("dashboard");
+
+
+        //Authentication 객체를 통해 유저 정보를 가져올 수 있다.
+//        UserVO userVo = (UserVO) authentication.getPrincipal();  //userDetail 객체를 가져옴
+        UserVO userVo =(UserVO)session.getAttribute("userInfo");
         System.out.println("dashboard :::::::::::  "+userVo.toString());
         model.addAttribute("userInfo", userVo);      //유저 아이디
 
