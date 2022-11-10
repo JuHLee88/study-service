@@ -24,7 +24,7 @@ spring:
   thymeleaf:
     cache: false
   zipkin:
-    base-url: http://http://43.201.132.111:9411
+    base-url: http://43.201.132.111:9411
     enabled: true
 
 mybatis:
