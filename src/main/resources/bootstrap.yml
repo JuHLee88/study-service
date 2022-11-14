@@ -1,5 +1,5 @@
 spring:
   cloud:
     config:
-      uri: http://52.78.161.54:8888
+      uri: http://43.201.132.111:8888
       name: user-service

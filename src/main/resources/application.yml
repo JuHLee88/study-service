@@ -5,10 +5,10 @@ spring:
   application:
     name: study-service
   rabbitmq:
-    host: 52.78.161.54
+    host: 43.201.132.111
     port: 5672
-    username: admin
-    password: StrongPassword
+    username: guest
+    password: guest
   datasource:
 #    url: jdbc:mariadb://database-1.c4pp2lrqcj6b.ap-northeast-2.rds.amazonaws.com:3306/studydb
 #    driver-class-name: org.mariadb.jdbc.Driver
@@ -40,7 +40,7 @@ eureka:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
   client:
     service-url:
-      defaultZone: http://52.78.161.54:8761/eureka
+      defaultZone: http://15.164.45.122:8761/eureka
 #      defaultZone: http://127.0.0.1:8761/eureka
     fetch-registry: true
     register-with-eureka: true
