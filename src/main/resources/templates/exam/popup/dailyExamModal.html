@@ -18,7 +18,7 @@
             //2. 문제 갱신
             $("#modalContent").html('');
             $.ajax({
-                url: "http://52.78.161.54:8000/study-service/dailyExam/dailyExamModal/pre",
+                url: "/study-service/dailyExam/dailyExamModal/pre",
                 data: studyQueVO,
                 type: 'POST',
                 // dataType: 'json',
@@ -75,7 +75,7 @@
             //2. 문제 갱신
             $("#modalContent").html('');
             $.ajax({
-                url: "http://52.78.161.54:8000/study-service/dailyExam/dailyExamModal/next",
+                url: "/study-service/dailyExam/dailyExamModal/next",
                 data: studyQueVO,
                 type: 'POST',
                 // dataType: 'json',
@@ -140,7 +140,7 @@
             //2. 문제 갱신
             $("#modalContent").html('');
             $.ajax({
-                url: "http://52.78.161.54:8000/study-service/dailyExam/dailyExamModal/complete",
+                url: "/study-service/dailyExam/dailyExamModal/complete",
                 data: studyQueVO,
                 type: 'POST',
                 success: function onData(data){
