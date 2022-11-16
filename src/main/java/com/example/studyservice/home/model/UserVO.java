@@ -21,6 +21,9 @@ public class UserVO implements UserDetails {
     String userAuth;
     String appendDate;
     String updateDate;
+    String boardAuth;
+    String queAuth;
+    String queTypeAuth;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -132,10 +132,10 @@
                             <h6 class="collapse-header">For maintanance:</h6>
                             <a class="collapse-item" style="color: #2e59d9; font-weight: bold; font-size: 13px;" href="/admin-service/queTypeRatio">인증분야 및 가중치관리</a>
                             <a class="collapse-item show" style="color: #dda20a; font-weight: bold; font-size: 13px;" href="/admin-service/queGen">문제관리</a>
-                            <a class="collapse-item show" style="color: #2e59d9; font-weight: bold; font-size: 13px;" href="/admin-service/totResult">결과관리</a>
+                            <a class="collapse-item" style="color: #2e59d9; font-weight: bold; font-size: 13px;" href="/admin-service/totResult">결과관리</a>
                             <div class="collapse-divider"></div>
                             <h6 class="collapse-header">For System:</h6>
-                            <a class="collapse-item" style="color: #2e59d9; font-weight: bold; font-size: 13px;" href="#">권한관리</a>
+                            <a class="collapse-item" style="color: #2e59d9; font-weight: bold; font-size: 13px;" href="/admin-service/authManage">권한관리</a>
                         </div>
                     </div>
                 </div>
@@ -148,7 +148,7 @@
                             <a class="collapse-item show" style="color: #dda20a; font-weight: bold; font-size: 13px;" href="/admin-service/totResult">결과관리</a>
                             <div class="collapse-divider"></div>
                             <h6 class="collapse-header">For System:</h6>
-                            <a class="collapse-item" style="color: #2e59d9; font-weight: bold; font-size: 13px;" href="#">권한관리</a>
+                            <a class="collapse-item" style="color: #2e59d9; font-weight: bold; font-size: 13px;" href="/admin-service/authManage">권한관리</a>
                         </div>
                     </div>
                 </div>
@@ -158,23 +158,23 @@
                             <h6 class="collapse-header">For maintanance:</h6>
                             <a class="collapse-item show" style="color: #dda20a; font-weight: bold; font-size: 13px;" href="/admin-service/queTypeRatio">인증분야 및 가중치관리</a>
                             <a class="collapse-item" style="color: #2e59d9; font-weight: bold; font-size: 13px;" href="/admin-service/queGen">문제관리</a>
-                            <a class="collapse-item show" style="color: #2e59d9; font-weight: bold; font-size: 13px;" href="/admin-service/totResult">결과관리</a>
+                            <a class="collapse-item" style="color: #2e59d9; font-weight: bold; font-size: 13px;" href="/admin-service/totResult">결과관리</a>
                             <div class="collapse-divider"></div>
                             <h6 class="collapse-header">For System:</h6>
-                            <a class="collapse-item" style="color: #2e59d9; font-weight: bold; font-size: 13px;" href="#">권한관리</a>
+                            <a class="collapse-item" style="color: #2e59d9; font-weight: bold; font-size: 13px;" href="/admin-service/authManage">권한관리</a>
                         </div>
                     </div>
                 </div>
-                <div th:case="Authority">
+                <div th:case="authManage">
                     <div id="collapsePages" class="collapse show" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
                             <h6 class="collapse-header">For maintanance:</h6>
                             <a class="collapse-item" style="color: #2e59d9; font-weight: bold; font-size: 13px;" href="/admin-service/queTypeRatio">인증분야 및 가중치관리</a>
                             <a class="collapse-item" style="color: #2e59d9; font-weight: bold; font-size: 13px;" href="/admin-service/queGen">문제관리</a>
-                            <a class="collapse-item show" style="color: #2e59d9; font-weight: bold; font-size: 13px;" href="/admin-service/totResult">결과관리</a>
+                            <a class="collapse-item" style="color: #2e59d9; font-weight: bold; font-size: 13px;" href="/admin-service/totResult">결과관리</a>
                             <div class="collapse-divider"></div>
                             <h6 class="collapse-header">For System:</h6>
-                            <a class="collapse-item show" style="color: #dda20a; font-weight: bold; font-size: 13px;" href="#">권한관리</a>
+                            <a class="collapse-item show" style="color: #dda20a; font-weight: bold; font-size: 13px;" href="/admin-service/authManage">권한관리</a>
                         </div>
                     </div>
                 </div>
@@ -187,7 +187,7 @@
                             <a class="collapse-item show" style="color: #2e59d9; font-weight: bold; font-size: 13px;" href="/admin-service/totResult">결과관리</a>
                             <div class="collapse-divider"></div>
                             <h6 class="collapse-header">For System:</h6>
-                            <a class="collapse-item" style="color: #2e59d9; font-weight: bold; font-size: 13px;" href="#">권한관리</a>
+                            <a class="collapse-item" style="color: #2e59d9; font-weight: bold; font-size: 13px;" href="/admin-service/authManage">권한관리</a>
                         </div>
                     </div>
                 </div>
@@ -209,7 +209,6 @@
         <div class="sidebar-card d-none d-lg-flex">
             <img class="sidebar-card-illustration mb-2" src="http://15.164.45.122:9001/bootstrap/img/undraw_rocket.svg" alt="...">
             <p class="text-center mb-2"><strong>This Version</strong> is proto-type!</p>
-            <a class="btn btn-success btn-sm">nothing action!</a>
         </div>
 
     </ul>
